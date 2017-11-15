@@ -1,4 +1,5 @@
 import { MockingBirdWrap } from '../wrap';
+import { applyStyle } from '../util';
 export let pivotBaseStyle = {
   width: '30px',
   height: '30px',
@@ -13,9 +14,7 @@ export class Pivot {
   wrap: MockingBirdWrap;
   style = {};
   updateStyle() {
-    Object.keys(this.style).forEach(v => {
-      this.dom.style[v] = this.style[v];
-    });
+    applyStyle(this.dom, this.style);
   }
   init() {
     this.dom = document.createElement('div');
