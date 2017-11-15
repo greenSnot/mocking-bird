@@ -1,80 +1,60 @@
-const defaultStyle = {
-  width: '200px',
-  height: '400px',
-  background: 'rgb(255, 255, 255)',
-  'box-shadow': '0px 3px 12px 4px #eee',
-  position: 'fixed',
-  top: '20px',
-  right: '20px',
-};
-
-const defaultState = {
-
-};
-
-const pivotStyle = {
-  width: '30px',
-  height: '30px',
-  position: 'absolute',
-  border: '3px solid #fff',
-  'border-radius': '18px',
-  'box-shadow': '#ccc 0px 1px 4px 3px',
-};
-
-const scalePivotStyle = {
-  ...pivotStyle,
-  right: '0',
-  top: '0',
-  background: '#03A9F4',
-  transform: 'translateX(50%) translateY(-50%)',
-};
-
-const positionPivotStyle = {
-  ...pivotStyle,
-  left: '0',
-  bottom: '0',
-  background: '#CDDC39',
-  transform: 'translateX(-50%) translateY(50%)',
-};
+import { MockingBirdState } from './types';
+import { MockingBirdWrap } from './wrap';
+import { PosPivot } from './pivot/posPivot';
+import { ShapePivot } from './pivot/shapePivot';
 
 class MockingBird {
-  dom: HTMLElement;
-  positionPivot: HTMLElement;
-  scalePivot: HTMLElement;
-  constructor(opt) {
-    this.initDom(opt);
-    document.body.appendChild(this.dom);
-  }
-  initDom(opt) {
-    this.dom = document.createElement('div');
-    const style = {
-      ...defaultStyle,
-      ...opt.style,
-    };
-    Object.keys(style).forEach(v => {
-      this.dom.style[v] = style[v];
-    });
-    this.initScalePivot();
-    this.initPositionPivot();
-    this.dom.appendChild(this.positionPivot);
-    this.dom.appendChild(this.scalePivot);
-  }
-  initPositionPivot() {
-    this.positionPivot = document.createElement('div');
-    Object.keys(positionPivotStyle).forEach(v => {
-      this.positionPivot.style[v] = positionPivotStyle[v];
-    });
-  }
-  initScalePivot() {
-    this.scalePivot = document.createElement('div');
-    Object.keys(scalePivotStyle).forEach(v => {
-      this.scalePivot.style[v] = scalePivotStyle[v];
-    });
+  state = {};
+  wrap: MockingBirdWrap;
+  posPivot: PosPivot;
+  shapePivot: ShapePivot;
+  constructor(state: MockingBirdState, opt = {}) {
+    this.state = state;
+    this.wrap = new MockingBirdWrap(opt);
+    this.shapePivot = new ShapePivot(this.wrap);
+    this.posPivot = new PosPivot(this.wrap);
+    this.wrap.dom.appendChild(this.shapePivot.dom);
+    this.wrap.dom.appendChild(this.posPivot.dom);
+    document.body.appendChild(this.wrap.dom);
   }
 }
 
 (window as any).MockingBird = MockingBird;
 
-new MockingBird({
+const testState: MockingBirdState = {
+  num: {
+    value: 3,
+    limit: {
+      min: 0,
+      max: 10,
+      step: 0.1,
+    },
+  },
+  select: {
+    value: 'a',
+    limit: ['a', 'b'],
+  },
+  input: {
+    value: 'abs',
+  },
+  btn: {
+    value: () => console.log('~'),
+  },
+  folder: {
+    value: {
+      num: {
+        value: 3,
+        limit: {
+          min: 0,
+          max: 10,
+          step: 0.1,
+        },
+      },
+    },
+    active: false,
+  },
+};
+
+new MockingBird(testState, {
   style: {},
 })
