@@ -1,6 +1,8 @@
+import { applyStyle } from './util';
+
 const defaultStyle = {
-  width: '200px',
-  'min-width': '200px',
+  width: '250px',
+  'min-width': '250px',
   height: '250px',
   'min-height': '200px',
   background: 'rgb(255, 255, 255)',
@@ -17,9 +19,15 @@ export class MockingBirdWrap {
   style = defaultStyle;
   constructor() {
     this.dom = document.createElement('div');
+    applyStyle(this.dom, {
+      display: '-webkit-box',
+      '-webkit-box-orient': 'vertical',
+    });
     this.content = document.createElement('div');
-    this.content.style.overflow = 'scroll';
-    this.content.style.height = '100%';
+    applyStyle(this.content, {
+      overflow: 'scroll',
+      '-webkit-box-flex': 1,
+    });
     this.dom.appendChild(this.content);
     this.updateStyle();
   }

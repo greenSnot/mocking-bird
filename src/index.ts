@@ -2,7 +2,7 @@ import { MockingBirdState, detect } from './types';
 import { MockingBirdWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
-import { applyStyle } from './util';
+import { applyStyle, toStr } from './util';
 
 function renderItem(state, key) {
   const dom = document.createElement('div');
@@ -129,6 +129,17 @@ class MockingBird {
   wrap: MockingBirdWrap;
   posPivot: PosPivot;
   shapePivot: ShapePivot;
+
+  curState = 'temp';
+  panel;
+  stateList: string[] = [];
+  stateIdToStr = {};
+  stateListDOM;
+  cloneStateDOM;
+  deleteStateDOM;
+  saveStateDOM;
+  reset;
+
   constructor(state: MockingBirdState, opt = {}) {
     this.state = state;
     this.wrap = new MockingBirdWrap();
@@ -138,12 +149,71 @@ class MockingBird {
     this.wrap.dom.appendChild(this.posPivot.dom);
     document.body.appendChild(this.wrap.dom);
     this.update();
+    this.initPanel();
   }
   update() {
     Object.keys(this.state).forEach(k => {
       const item = this.state[k];
       this.wrap.content.appendChild(renderItem(item, k));
     });
+  }
+  initPanel() {
+    this.panel = document.createElement('div');
+    applyStyle(this.panel, {
+      background: '#FFC107',
+      height: '30px',
+      'margin-top': '5px',
+      display: '-webkit-box',
+      '-webkit-box-pack': 'end',
+      '-webkit-box-align': 'center',
+    });
+    this.wrap.dom.appendChild(this.panel);
+    try {
+      this.stateList = JSON.parse(localStorage.getItem('mockingbird_state_list')) || ['temp'];
+      this.curState = localStorage.getItem('mockingbird_cur_state') || 'temp';
+      this.stateList.forEach(k => {
+        this.stateIdToStr[k] = localStorage.getItem('mockingbird_state_id_' + k);
+      });
+    } catch (e) {
+      this.stateList = ['temp'];
+      this.curState = 'temp';
+      this.stateIdToStr['temp'] = toStr(this.state);
+    }
+    this.stateListDOM = document.createElement('select');
+    this.stateList.forEach(s => {
+      const option = document.createElement('option');
+      option.value = s;
+      option.innerText = s;
+      this.stateListDOM.appendChild(option);
+    });
+    this.deleteStateDOM = document.createElement('button');
+    this.deleteStateDOM.innerText = 'del';
+    this.saveStateDOM = document.createElement('button');
+    this.saveStateDOM.innerText = 'save';
+    this.saveStateDOM.addEventListener('click', () => {
+      this.save();
+    });
+    this.cloneStateDOM = document.createElement('button');
+    this.cloneStateDOM.innerText = 'clone';
+    this.cloneStateDOM.addEventListener('click', () => {
+      const id = prompt('state id?');
+      this.stateList.push(id);
+      this.curState = id;
+      this.stateIdToStr[id] = toStr(this.state);
+      this.save();
+    });
+    this.reset = document.createElement('button');
+    this.reset.innerText = 'reset';
+    this.panel.appendChild(this.stateListDOM);
+    this.panel.appendChild(this.saveStateDOM);
+    this.panel.appendChild(this.cloneStateDOM);
+    this.panel.appendChild(this.deleteStateDOM);
+    this.panel.appendChild(this.reset);
+  }
+  save() {
+    localStorage.setItem('mockingbird_state_list', JSON.stringify(this.stateList));
+    localStorage.setItem('mockingbird_cur_state', this.curState);
+    localStorage.setItem('mockingbird_state_id_' + this.curState, toStr(this.state));
   }
 }
 
