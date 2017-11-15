@@ -4,7 +4,7 @@ import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
 import { applyStyle, toStr } from './util';
 
-function renderItem(state, key) {
+function renderItem(state, key, root) {
   const dom = document.createElement('div');
   const content = document.createElement('div');
   const contentStyle = {
@@ -41,13 +41,14 @@ function renderItem(state, key) {
       wrap.content.style.display = state.active ? 'block' : 'none';
       Object.keys(state.value).forEach(k => {
         const item = state.value[k];
-        wrap.content.appendChild(renderItem(item, k));
+        wrap.content.appendChild(renderItem(item, k, root));
       });
       btn.addEventListener('click', () => {
         state.active = wrap.content.style.display === 'none';
         wrap.content.style.display = state.active ? 'block' : 'none';
         btn.innerText = state.active ? '-' : '+';
         state.onChange(state);
+        root.onChange();
       });
       i.appendChild(wrap.content);
       return i;
@@ -64,6 +65,7 @@ function renderItem(state, key) {
       select.addEventListener('change', function(e) {
         state.value = this.value;
         state.onChange(state);
+        root.onChange();
       });
       return select;
     },
@@ -79,6 +81,7 @@ function renderItem(state, key) {
       i.addEventListener('input', function(e) {
         state.value = this.value;
         state.onChange(state);
+        root.onChange();
       });
       return i;
     },
@@ -89,6 +92,7 @@ function renderItem(state, key) {
       i.addEventListener('change', function() {
         state.value = this.checked;
         state.onChange(state);
+        root.onChange();
       });
       return i;
     },
@@ -108,11 +112,12 @@ function renderItem(state, key) {
       i.value = state.value;
       i.addEventListener('input', function() {
         num.innerText = this.value;
-        state.value = this.value;
+        state.value = parseFloat(this.value);
       });
       i.addEventListener('change', function() {
-        state.value = this.value;
+        state.value = parseFloat(this.value);
         state.onChange(state);
+        root.onChange();
       });
       num.innerText = state.value;
       wrap.appendChild(i);
@@ -134,30 +139,51 @@ class MockingBird {
   panel;
   stateList: string[] = [];
   stateIdToStr = {};
-  stateListDOM;
-  cloneStateDOM;
-  deleteStateDOM;
-  saveStateDOM;
-  reset;
+  selectStateList;
+  btnClone;
+  btnDel;
+  btnRest;
 
-  constructor(state: MockingBirdState, opt = {}) {
-    this.state = state;
+  constructor(defaultState: MockingBirdState, opt = {}) {
     this.wrap = new MockingBirdWrap();
     this.shapePivot = new ShapePivot(this.wrap);
     this.posPivot = new PosPivot(this.wrap);
     this.wrap.dom.appendChild(this.shapePivot.dom);
     this.wrap.dom.appendChild(this.posPivot.dom);
     document.body.appendChild(this.wrap.dom);
-    this.update();
-    this.initPanel();
+    try {
+      this.stateList = JSON.parse(localStorage.getItem('mockingbird_state_list'));
+      this.curState = localStorage.getItem('mockingbird_cur_state');
+      this.stateList.forEach(k => {
+        this.stateIdToStr[k] = localStorage.getItem('mockingbird_state_id_' + k);
+      });
+      this.changeState(this.curState);
+    } catch (e) {
+      this.stateList = ['temp'];
+      this.curState = 'temp';
+      this.state = defaultState;
+      this.stateIdToStr['temp'] = toStr(this.state);
+      this.changeState(this.curState);
+      this.save();
+    }
+    this.initPanel(defaultState);
   }
   update() {
+    this.wrap.content.innerHTML = '';
     Object.keys(this.state).forEach(k => {
       const item = this.state[k];
-      this.wrap.content.appendChild(renderItem(item, k));
+      this.wrap.content.appendChild(renderItem(item, k, this));
     });
   }
-  initPanel() {
+  onChange() {
+    this.save();
+  }
+  changeState(id) {
+    this.curState = id;
+    this.state = eval('(() => (' + this.stateIdToStr[id] + '))()');
+    this.update();
+  }
+  initPanel(defaultState) {
     this.panel = document.createElement('div');
     applyStyle(this.panel, {
       background: '#FFC107',
@@ -168,52 +194,79 @@ class MockingBird {
       '-webkit-box-align': 'center',
     });
     this.wrap.dom.appendChild(this.panel);
-    try {
-      this.stateList = JSON.parse(localStorage.getItem('mockingbird_state_list')) || ['temp'];
-      this.curState = localStorage.getItem('mockingbird_cur_state') || 'temp';
-      this.stateList.forEach(k => {
-        this.stateIdToStr[k] = localStorage.getItem('mockingbird_state_id_' + k);
-      });
-    } catch (e) {
-      this.stateList = ['temp'];
-      this.curState = 'temp';
-      this.stateIdToStr['temp'] = toStr(this.state);
-    }
-    this.stateListDOM = document.createElement('select');
+    this.initBtnClone();
+    this.initBtnDel();
+    this.initBtnReset();
+    this.initStateList();
+    this.panel.appendChild(this.selectStateList);
+    this.panel.appendChild(this.btnClone);
+    this.panel.appendChild(this.btnDel);
+    this.panel.appendChild(this.btnRest);
+  }
+  initStateList() {
+    this.selectStateList = document.createElement('select');
+    const self = this;
+    this.selectStateList.addEventListener('change', function() {
+      self.changeState(this.value);
+      self.saveCurState();
+    });
+    this.updateStateList();
+  }
+  updateStateList() {
+    this.selectStateList.innerHTML = '';
     this.stateList.forEach(s => {
       const option = document.createElement('option');
       option.value = s;
       option.innerText = s;
-      this.stateListDOM.appendChild(option);
+      this.selectStateList.appendChild(option);
     });
-    this.deleteStateDOM = document.createElement('button');
-    this.deleteStateDOM.innerText = 'del';
-    this.saveStateDOM = document.createElement('button');
-    this.saveStateDOM.innerText = 'save';
-    this.saveStateDOM.addEventListener('click', () => {
-      this.save();
+    this.selectStateList.value = this.curState;
+  }
+  initBtnDel() {
+    this.btnDel = document.createElement('button');
+    this.btnDel.innerText = 'del';
+    this.btnDel.addEventListener('click', () => {
+      if (this.stateList.length === 1) {
+        return;
+      }
+      this.stateList = this.stateList.filter(i => i !== this.curState);
+      this.curState = this.stateList[0];
+      localStorage.removeItem('mockingbird_state_id_' + this.curState);
+      this.changeState(this.curState);
+      this.updateStateList();
     });
-    this.cloneStateDOM = document.createElement('button');
-    this.cloneStateDOM.innerText = 'clone';
-    this.cloneStateDOM.addEventListener('click', () => {
-      const id = prompt('state id?');
+  }
+  initBtnClone() {
+    this.btnClone = document.createElement('button');
+    this.btnClone.innerText = 'clone';
+    this.btnClone.addEventListener('click', () => {
+      const id = prompt('state id?') || 'temp';
       this.stateList.push(id);
       this.curState = id;
       this.stateIdToStr[id] = toStr(this.state);
       this.save();
+      this.updateStateList();
     });
-    this.reset = document.createElement('button');
-    this.reset.innerText = 'reset';
-    this.panel.appendChild(this.stateListDOM);
-    this.panel.appendChild(this.saveStateDOM);
-    this.panel.appendChild(this.cloneStateDOM);
-    this.panel.appendChild(this.deleteStateDOM);
-    this.panel.appendChild(this.reset);
+  }
+  initBtnReset() {
+    this.btnRest = document.createElement('button');
+    this.btnRest.addEventListener('click', () => localStorage.clear());
+    this.btnRest.innerText = 'reset';
   }
   save() {
+    this.saveStateList();
+    this.saveCurState();
+    this.saveStateDetail();
+  }
+  saveStateList() {
     localStorage.setItem('mockingbird_state_list', JSON.stringify(this.stateList));
+  }
+  saveCurState() {
     localStorage.setItem('mockingbird_cur_state', this.curState);
-    localStorage.setItem('mockingbird_state_id_' + this.curState, toStr(this.state));
+  }
+  saveStateDetail() {
+    this.stateIdToStr[this.curState] = toStr(this.state);
+    localStorage.setItem('mockingbird_state_id_' + this.curState, this.stateIdToStr[this.curState]);
   }
 }
 

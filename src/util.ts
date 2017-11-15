@@ -13,5 +13,8 @@ export function toStr(json) {
       return key + ':' + toStr(json[key]);
     }).join(',') + '}';
   }
+  if (typeof json === 'string') {
+    return `'${json}'`;
+  }
   return json.toString();
 }
