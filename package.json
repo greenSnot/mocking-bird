@@ -1,7 +1,12 @@
 {
+  "name": "mocking-frog",
+  "version": "0.0.1",
   "scripts": {
-    "start": "webpack-dev-server"
+    "build": "webpack",
+    "dev": "webpack-dev-server -w",
+    "prepare": "webpack"
   },
+  "main": "dist/bundle.js",
   "dependencies": {
     "@shopify/draggable": "^1.0.0-beta.3",
     "http-server": "^0.10.0",

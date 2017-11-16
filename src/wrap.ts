@@ -13,12 +13,16 @@ const defaultStyle = {
   right: '20px',
 };
 
-export class MockingBirdWrap {
+export class MockingFrogWrap {
   dom: HTMLElement;
   content: HTMLElement;
   style = defaultStyle;
-  constructor() {
+  constructor(style?) {
     this.dom = document.createElement('div');
+    this.style = style ? {
+      ...this.style,
+      ...style,
+    } : this.style;
     applyStyle(this.dom, {
       display: '-webkit-box',
       '-webkit-box-orient': 'vertical',

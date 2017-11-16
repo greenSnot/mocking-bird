@@ -1,29 +1,29 @@
-export type MockingBirdEvent = {
+export type MockingFrogEvent = {
   onChange: Function;
 }
 
-export type MockingBirdBtn = {
+export type MockingFrogBtn = {
   value: Function;
   order?: number;
 }
 
-export type MockingBirdFolder = MockingBirdEvent & {
-  value: MockingBirdState;
+export type MockingFrogFolder = MockingFrogEvent & {
+  value: MockingFrogState;
   active: boolean;
   order?: number;
 }
 
-export type MockingBirdCheck = MockingBirdEvent & {
+export type MockingFrogCheck = MockingFrogEvent & {
   value: boolean;
   order?: number;
 }
 
-export type MockingBirdInput = MockingBirdEvent & {
+export type MockingFrogInput = MockingFrogEvent & {
   value: string;
   order?: number;
 }
 
-export type MockingBirdRange = MockingBirdEvent & {
+export type MockingFrogRange = MockingFrogEvent & {
   value: number;
   limit: {
     min: number;
@@ -33,15 +33,15 @@ export type MockingBirdRange = MockingBirdEvent & {
   order?: number;
 }
 
-export type MockingBirdSelect = {
+export type MockingFrogSelect = {
   value: string;
   limit: string[];
   order?: number;
 }
 
-export type MockingBirdItem = MockingBirdCheck | MockingBirdRange | MockingBirdInput | MockingBirdBtn | MockingBirdFolder | MockingBirdSelect;
-export type MockingBirdState = {
-  [key: string]: MockingBirdItem;
+export type MockingFrogItem = MockingFrogCheck | MockingFrogRange | MockingFrogInput | MockingFrogBtn | MockingFrogFolder | MockingFrogSelect;
+export type MockingFrogState = {
+  [key: string]: MockingFrogItem;
 };
 
 export function detect(i) {

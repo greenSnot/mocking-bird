@@ -6,7 +6,12 @@
     "noImplicitAny": false,
     "allowJs": true,
     "moduleResolution": "node",
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "mocking-frog": ["."]
+    },
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules",

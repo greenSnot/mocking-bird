@@ -1,4 +1,4 @@
-import { MockingBirdWrap } from '../wrap';
+import { MockingFrogWrap } from '../wrap';
 import { applyStyle } from '../util';
 export let pivotBaseStyle = {
   width: '30px',
@@ -12,7 +12,7 @@ export let pivotBaseStyle = {
 
 export class Pivot {
   dom: HTMLElement;
-  wrap: MockingBirdWrap;
+  wrap: MockingFrogWrap;
   style = {};
   updateStyle() {
     applyStyle(this.dom, this.style);
@@ -20,7 +20,7 @@ export class Pivot {
   init() {
     this.dom = document.createElement('div');
   }
-  constructor(wrap: MockingBirdWrap) {
+  constructor(wrap: MockingFrogWrap) {
     this.wrap = wrap;
     this.init();
   }

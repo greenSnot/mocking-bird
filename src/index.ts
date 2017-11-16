@@ -1,5 +1,5 @@
-import { MockingBirdState, MockingBirdItem, detect } from './types';
-import { MockingBirdWrap } from './wrap';
+import { MockingFrogState, MockingFrogItem, detect } from './types';
+import { MockingFrogWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
 import { applyStyle, toStr, findClosestState } from './util';
@@ -87,7 +87,7 @@ function renderItem(state, key, parent, root) {
       const btn = document.createElement('button');
       btn.innerText = state.active ? '-' : '+';
       i.appendChild(btn);
-      const wrap = new MockingBirdWrap();
+      const wrap = new MockingFrogWrap();
       wrap.content.style.display = state.active ? 'block' : 'none';
       Object.keys(state.value).sort((a, b) => state.value[a].order > state.value[b].order ? 1 : -1).forEach(k => {
         const item = state.value[k];
@@ -179,9 +179,9 @@ function renderItem(state, key, parent, root) {
   content.appendChild(map[detect(state)]());
   return dom;
 }
-class MockingBird {
+export class MockingFrog {
   state = {};
-  wrap: MockingBirdWrap;
+  wrap: MockingFrogWrap;
   posPivot: PosPivot;
   shapePivot: ShapePivot;
 
@@ -194,36 +194,40 @@ class MockingBird {
   btnDel;
   btnRest;
 
-  constructor(defaultState: MockingBirdState, opt = {}) {
-    this.wrap = new MockingBirdWrap();
+  constructor(defaultStateMap: {[key: string]: MockingFrogState}, opt: {
+    curState: string,
+    style: any,
+  }) {
+    this.wrap = new MockingFrogWrap(opt.style);
     this.shapePivot = new ShapePivot(this.wrap);
     this.posPivot = new PosPivot(this.wrap);
     this.wrap.dom.appendChild(this.shapePivot.dom);
     this.wrap.dom.appendChild(this.posPivot.dom);
     document.body.appendChild(this.wrap.dom);
     try {
-      this.stateList = JSON.parse(localStorage.getItem('mockingbird_state_list'));
-      this.curState = localStorage.getItem('mockingbird_cur_state');
+      this.stateList = JSON.parse(localStorage.getItem('mockingfrog_state_list'));
+      this.curState = localStorage.getItem('mockingfrog_cur_state');
       this.stateList.forEach(k => {
-        this.stateIdToStr[k] = localStorage.getItem('mockingbird_state_id_' + k);
+        this.stateIdToStr[k] = localStorage.getItem('mockingfrog_state_id_' + k);
       });
       this.changeState(this.curState);
     } catch (e) {
-      this.stateList = ['temp'];
-      this.curState = 'temp';
-      this.initOrder(defaultState);
-      console.log(defaultState);
-      this.stateIdToStr['temp'] = toStr(defaultState);
+      this.stateList = Object.keys(defaultStateMap);
+      this.curState = opt.curState;
+      this.initOrder(defaultStateMap[this.curState]);
+      this.stateList.forEach(i => {
+        this.stateIdToStr[i] = toStr(defaultStateMap[i]);
+      });
       this.changeState(this.curState);
       this.save();
     }
-    this.initPanel(defaultState);
+    this.initPanel();
   }
-  initOrder(state: MockingBirdState) {
+  initOrder(state: MockingFrogState) {
     Object.keys(state).forEach((i, index) => {
       const item = state[i];
       if (detect(item) === 'folder') {
-        this.initOrder(item.value as MockingBirdState);
+        this.initOrder(item.value as MockingFrogState);
       }
       item.order = item.order >= 0 ? item.order : index;
     });
@@ -243,7 +247,7 @@ class MockingBird {
     this.state = eval('(() => (' + this.stateIdToStr[id] + '))()');
     this.update();
   }
-  initPanel(defaultState) {
+  initPanel() {
     this.panel = document.createElement('div');
     applyStyle(this.panel, {
       background: '#ff9800',
@@ -291,7 +295,7 @@ class MockingBird {
       }
       this.stateList = this.stateList.filter(i => i !== this.curState);
       this.curState = this.stateList[0];
-      localStorage.removeItem('mockingbird_state_id_' + this.curState);
+      localStorage.removeItem('mockingfrog_state_id_' + this.curState);
       this.changeState(this.curState);
       this.updateStateList();
     });
@@ -322,66 +326,13 @@ class MockingBird {
     this.saveStateDetail();
   }
   saveStateList() {
-    localStorage.setItem('mockingbird_state_list', JSON.stringify(this.stateList));
+    localStorage.setItem('mockingfrog_state_list', JSON.stringify(this.stateList));
   }
   saveCurState() {
-    localStorage.setItem('mockingbird_cur_state', this.curState);
+    localStorage.setItem('mockingfrog_cur_state', this.curState);
   }
   saveStateDetail() {
     this.stateIdToStr[this.curState] = toStr(this.state);
-    localStorage.setItem('mockingbird_state_id_' + this.curState, this.stateIdToStr[this.curState]);
+    localStorage.setItem('mockingfrog_state_id_' + this.curState, this.stateIdToStr[this.curState]);
   }
 }
-
-(window as any).MockingBird = MockingBird;
-
-const testState: MockingBirdState = {
-  num: {
-    value: 3,
-    limit: {
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-    onChange: () => {},
-  },
-  select: {
-    value: 'b',
-    limit: ['a', 'b'],
-    onChange: () => {},
-  },
-  input: {
-    value: 'abs',
-    onChange: () => {},
-  },
-  btn: {
-    value: () => console.log('~'),
-  },
-  folder: {
-    value: {
-      num: {
-        value: 3,
-        limit: {
-          min: 0,
-          max: 10,
-          step: 0.1,
-        },
-        onChange: () => { console.log('!'); },
-      },
-      c: {
-        value: false,
-        onChange: () => { console.log('#'); },
-      },
-    },
-    active: false,
-    onChange: () => {},
-  },
-  c: {
-    value: true,
-    onChange: () => {},
-  },
-};
-
-new MockingBird(testState, {
-  style: {},
-});

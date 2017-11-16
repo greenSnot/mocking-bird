@@ -1,4 +1,4 @@
-import { MockingBirdWrap } from '../wrap';
+import { MockingFrogWrap } from '../wrap';
 import { pivotBaseStyle, Pivot } from './';
 
 export class PosPivot extends Pivot {
