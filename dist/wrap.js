@@ -19,13 +19,15 @@ var defaultStyle = {
     top: '20px',
     right: '20px',
     'transform-origin': '100% 0',
-    transform: 'scale(' + window.devicePixelRatio + ')',
+    transform: '',
 };
 var MockingFrogWrap = /** @class */ (function () {
-    function MockingFrogWrap(style) {
+    function MockingFrogWrap(scale, style) {
         this.style = defaultStyle;
         this.dom = document.createElement('div');
         this.style = style ? __assign({}, this.style, style) : this.style;
+        this.scale = scale;
+        this.style.transform = 'scale(' + this.scale + ')';
         this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
         this.style.height = localStorage.getItem('mocking_frog_wrap_height') || this.style.height;
         this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;

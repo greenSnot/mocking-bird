@@ -90,7 +90,7 @@ function renderItem(state, key, parent, root) {
       const btn = document.createElement('button');
       btn.innerText = state.active ? '-' : '+';
       i.appendChild(btn);
-      const wrap = new MockingFrogWrap();
+      const wrap = new MockingFrogWrap(root.scale);
       wrap.content.style.display = state.active ? 'block' : 'none';
       Object.keys(state.value).sort((a, b) => state.value[a].order > state.value[b].order ? 1 : -1).forEach(k => {
         const item = state.value[k];
@@ -212,12 +212,16 @@ export class MockingFrog {
   btnClone;
   btnDel;
   btnRest;
+  
+  scale: number;
 
   constructor(defaultStateMap: {[key: string]: MockingFrogState}, opt: {
     curState: string,
+    scale: number,
     style: any,
   }) {
-    this.wrap = new MockingFrogWrap(opt.style);
+    this.scale = opt.scale || 1;
+    this.wrap = new MockingFrogWrap(this.scale, opt.style);
     this.wrap.dom.className = 'mocking-frog';
     this.shapePivot = new ShapePivot(this.wrap);
     this.posPivot = new PosPivot(this.wrap);
@@ -227,7 +231,7 @@ export class MockingFrog {
     css.type = 'text/css';
     css.appendChild(document.createTextNode(`
       .mocking-frog * {
-        font-size: ${12 * window.devicePixelRatio}px;
+        font-size: ${12 * opt.scale}px;
         color: #fff;
         font-family: arial,sans-serif;
       }

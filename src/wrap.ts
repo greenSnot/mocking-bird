@@ -10,19 +10,22 @@ const defaultStyle = {
   top: '20px',
   right: '20px',
   'transform-origin': '100% 0',
-  transform: 'scale(' + window.devicePixelRatio + ')',
+  transform: '',
 };
 
 export class MockingFrogWrap {
   dom: HTMLElement;
   content: HTMLElement;
   style = defaultStyle;
-  constructor(style?) {
+  scale: number;
+  constructor(scale, style?) {
     this.dom = document.createElement('div');
     this.style = style ? {
       ...this.style,
       ...style,
     } : this.style;
+    this.scale = scale;
+    this.style.transform = 'scale(' + this.scale + ')';
     this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
     this.style.height = localStorage.getItem('mocking_frog_wrap_height') || this.style.height;
     this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;

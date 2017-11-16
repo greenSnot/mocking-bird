@@ -51,6 +51,7 @@ new MockingFrog({
   'default': testState
 }, {
   curState: 'default',
+  scale: devicePixelRatio,
   style: {
     width: '270px',
   },

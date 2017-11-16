@@ -37,8 +37,8 @@ export class ShapePivot extends Pivot {
       }
       const x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
       const y = Math.floor(event.clientY >= 0 ? event.clientY : event.touches[event.touches.length - 1].clientY);
-      this.wrap.style.width = lastW + (downX - x) / window.devicePixelRatio + 'px';
-      this.wrap.style.height = lastH + (y - downY) / window.devicePixelRatio + 'px';
+      this.wrap.style.width = lastW + (downX - x) / this.wrap.scale + 'px';
+      this.wrap.style.height = lastH + (y - downY) / this.wrap.scale + 'px';
       this.wrap.updateStyle();
     }
     function onMouseUp(event) {
