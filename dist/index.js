@@ -151,13 +151,27 @@ function renderItem(state, key, parent, root) {
         },
         range: function () {
             var wrap = document.createElement('div');
+            var rangeWrap = document.createElement('div');
             util_1.applyStyle(wrap, {
                 display: '-webkit-box',
-                '-webkit-box-orient': 'vertical',
+                '-webkit-box-orient': 'horizontal',
                 '-webkit-box-align': 'center',
+                height: '40px',
+                width: '100%',
+            });
+            util_1.applyStyle(rangeWrap, {
+                display: '-webkit-box',
+                '-webkit-box-orient': 'horizontal',
+                '-webkit-box-align': 'center',
+                position: 'relative',
+                '-webkit-box-flex': 1,
+                'margin-right': '10px',
             });
             var num = document.createElement('div');
             var i = document.createElement('input');
+            util_1.applyStyle(i, {
+                width: '100%',
+            });
             i.setAttribute('type', 'range');
             i.setAttribute('min', state.limit.min);
             i.setAttribute('max', state.limit.max);
@@ -173,7 +187,8 @@ function renderItem(state, key, parent, root) {
                 root.onChange();
             });
             num.innerText = state.value;
-            wrap.appendChild(i);
+            rangeWrap.appendChild(i);
+            wrap.appendChild(rangeWrap);
             wrap.appendChild(num);
             return wrap;
         },
@@ -196,7 +211,7 @@ var MockingFrog = /** @class */ (function () {
         this.wrap.dom.appendChild(this.posPivot.dom);
         var css = document.createElement('style');
         css.type = 'text/css';
-        css.appendChild(document.createTextNode("\n      .mocking-frog * {\n        font-size: " + 12 * window.devicePixelRatio + "px;\n        color: #fff;\n        font-family: arial,sans-serif;\n      }\n      .mocking-frog input {\n        background: transparent;\n        border: 0;\n        height: 40px;\n        border-bottom: 1px solid #fff;\n      }\n      .mocking-frog input[type=\"input\"] {\n        width: 100%;\n      }\n      .mocking-frog select {\n        border: 1px solid #fff;\n        background: transparent;\n        border-radius: 0;\n        height: 35px;\n      }\n      .mocking-frog input[type=\"checkbox\"] {\n        width: 30px;\n        height: 30px;\n      }\n    "));
+        css.appendChild(document.createTextNode("\n      .mocking-frog * {\n        font-size: " + 12 * window.devicePixelRatio + "px;\n        color: #fff;\n        font-family: arial,sans-serif;\n      }\n      .mocking-frog input {\n        background: transparent;\n        border: 0;\n        height: 40px;\n      }\n      .mocking-frog input[type=input] {\n        width: 100%;\n        border-bottom: 1px solid #fff;\n      }\n      .mocking-frog select {\n        border: 1px solid #fff;\n        background: transparent;\n        border-radius: 0;\n        height: 35px;\n      }\n      .mocking-frog input[type=checkbox] {\n        width: 30px;\n        height: 30px;\n      }\n      \n      .mocking-frog input[type=range] {\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        position: absolute;\n        left: 50%;\n        top: 50%;\n        width: 200px;\n        transform: translate(-50%, -50%);\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-runnable-track {\n        -webkit-appearance: none;\n        background: #fff;\n        height: 2px;\n      }\n      \n      .mocking-frog input[type=range]:focus {\n        outline: none;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb {\n        -webkit-appearance: none;\n        border: 2px solid;\n        border-radius: 50%;\n        height: 25px;\n        width: 25px;\n        max-width: 80px;\n        position: relative;\n        bottom: 11px;\n        background-color: #ff9632;\n        cursor: -webkit-grab;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb:active {\n        cursor: -webkit-grabbing;\n      }\n    "));
         document.getElementsByTagName("head")[0].appendChild(css);
         document.body.appendChild(this.wrap.dom);
         console.log(css);

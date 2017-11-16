@@ -152,13 +152,27 @@ function renderItem(state, key, parent, root) {
     },
     range: () => {
       const wrap = document.createElement('div');
+      const rangeWrap = document.createElement('div');
       applyStyle(wrap, {
         display: '-webkit-box',
-        '-webkit-box-orient': 'vertical',
+        '-webkit-box-orient': 'horizontal',
         '-webkit-box-align': 'center',
+        height: '40px',
+        width: '100%',
+      });
+      applyStyle(rangeWrap, {
+        display: '-webkit-box',
+        '-webkit-box-orient': 'horizontal',
+        '-webkit-box-align': 'center',
+        position: 'relative',
+        '-webkit-box-flex': 1,
+        'margin-right': '10px',
       });
       const num = document.createElement('div');
       const i = document.createElement('input');
+      applyStyle(i, {
+        width: '100%',
+      });
       i.setAttribute('type', 'range');
       i.setAttribute('min', state.limit.min);
       i.setAttribute('max', state.limit.max);
@@ -174,7 +188,8 @@ function renderItem(state, key, parent, root) {
         root.onChange();
       });
       num.innerText = state.value;
-      wrap.appendChild(i);
+      rangeWrap.appendChild(i);
+      wrap.appendChild(rangeWrap);
       wrap.appendChild(num);
       return wrap;
     },
@@ -220,10 +235,10 @@ export class MockingFrog {
         background: transparent;
         border: 0;
         height: 40px;
-        border-bottom: 1px solid #fff;
       }
-      .mocking-frog input[type="input"] {
+      .mocking-frog input[type=input] {
         width: 100%;
+        border-bottom: 1px solid #fff;
       }
       .mocking-frog select {
         border: 1px solid #fff;
@@ -231,9 +246,46 @@ export class MockingFrog {
         border-radius: 0;
         height: 35px;
       }
-      .mocking-frog input[type="checkbox"] {
+      .mocking-frog input[type=checkbox] {
         width: 30px;
         height: 30px;
+      }
+      
+      .mocking-frog input[type=range] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 200px;
+        transform: translate(-50%, -50%);
+      }
+      
+      .mocking-frog input[type=range]::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        background: #fff;
+        height: 2px;
+      }
+      
+      .mocking-frog input[type=range]:focus {
+        outline: none;
+      }
+      
+      .mocking-frog input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: 2px solid;
+        border-radius: 50%;
+        height: 25px;
+        width: 25px;
+        max-width: 80px;
+        position: relative;
+        bottom: 11px;
+        background-color: #ff9632;
+        cursor: -webkit-grab;
+      }
+      
+      .mocking-frog input[type=range]::-webkit-slider-thumb:active {
+        cursor: -webkit-grabbing;
       }
     `));
     document.getElementsByTagName("head")[0].appendChild(css);
