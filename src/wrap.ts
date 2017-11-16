@@ -1,8 +1,8 @@
 import { applyStyle } from './util';
 
 const defaultStyle = {
-  width: '250px',
-  'min-width': '250px',
+  width: '200px',
+  'min-width': '200px',
   height: '250px',
   'min-height': '200px',
   background: 'rgb(255, 255, 255)',

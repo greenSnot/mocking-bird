@@ -42,8 +42,8 @@ export class PosPivot extends Pivot {
     }
     this.dom.addEventListener('mousedown', (e) => onMouseDown.bind(this)(e));
     this.dom.addEventListener('touchstart', (e) => onMouseDown.bind(this)(e));
-    this.dom.addEventListener('mousemove', (e) => onMouseMove.bind(this)(e));
-    this.dom.addEventListener('touchmove', (e) => onMouseMove.bind(this)(e));
+    document.body.addEventListener('mousemove', (e) => onMouseMove.bind(this)(e));
+    document.body.addEventListener('touchmove', (e) => onMouseMove.bind(this)(e));
     this.dom.addEventListener('mouseup', (e) => onMouseUp.bind(this)(e));
     this.dom.addEventListener('touchend', (e) => onMouseUp.bind(this)(e));
   }

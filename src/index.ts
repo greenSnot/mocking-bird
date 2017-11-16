@@ -17,7 +17,8 @@ function renderItem(state, key, root) {
     display: '-webkit-box',
     'margin-bottom': '5px',
     padding: '5px 10px 5px 10px',
-    background: '#eee',
+    background: '#ffc107',
+    color: '#fff',
   });
   applyStyle(content, contentStyle);
 
@@ -186,7 +187,7 @@ class MockingBird {
   initPanel(defaultState) {
     this.panel = document.createElement('div');
     applyStyle(this.panel, {
-      background: '#FFC107',
+      background: '#ff9800',
       height: '30px',
       'margin-top': '5px',
       display: '-webkit-box',
