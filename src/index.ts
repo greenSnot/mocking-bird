@@ -1,4 +1,4 @@
-import { MockingBirdState, detect } from './types';
+import { MockingBirdState, MockingBirdItem, detect } from './types';
 import { MockingBirdWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
@@ -162,16 +162,26 @@ class MockingBird {
     } catch (e) {
       this.stateList = ['temp'];
       this.curState = 'temp';
-      this.state = defaultState;
-      this.stateIdToStr['temp'] = toStr(this.state);
+      this.initOrder(defaultState);
+      console.log(defaultState);
+      this.stateIdToStr['temp'] = toStr(defaultState);
       this.changeState(this.curState);
       this.save();
     }
     this.initPanel(defaultState);
   }
+  initOrder(state: MockingBirdState) {
+    Object.keys(state).forEach((i, index) => {
+      const item = state[i];
+      if (detect(item) === 'folder') {
+        this.initOrder(item.value as MockingBirdState);
+      }
+      item.order = item.order >= 0 ? item.order : index;
+    });
+  }
   update() {
     this.wrap.content.innerHTML = '';
-    Object.keys(this.state).forEach(k => {
+    Object.keys(this.state).sort((a, b) => (this.state[a].order > this.state[b].order ? 1 : -1)).forEach(k => {
       const item = this.state[k];
       this.wrap.content.appendChild(renderItem(item, k, this));
     });
@@ -251,7 +261,10 @@ class MockingBird {
   }
   initBtnReset() {
     this.btnRest = document.createElement('button');
-    this.btnRest.addEventListener('click', () => localStorage.clear());
+    this.btnRest.addEventListener('click', () => {
+      localStorage.clear();
+      location.reload();
+    });
     this.btnRest.innerText = 'reset';
   }
   save() {

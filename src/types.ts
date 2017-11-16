@@ -4,19 +4,23 @@ export type MockingBirdEvent = {
 
 export type MockingBirdBtn = {
   value: Function;
+  order?: number;
 }
 
 export type MockingBirdFolder = MockingBirdEvent & {
   value: MockingBirdState;
   active: boolean;
+  order?: number;
 }
 
 export type MockingBirdCheck = MockingBirdEvent & {
   value: boolean;
+  order?: number;
 }
 
 export type MockingBirdInput = MockingBirdEvent & {
   value: string;
+  order?: number;
 }
 
 export type MockingBirdRange = MockingBirdEvent & {
@@ -26,15 +30,18 @@ export type MockingBirdRange = MockingBirdEvent & {
     max: number;
     step: number;
   }
+  order?: number;
 }
 
 export type MockingBirdSelect = {
   value: string;
   limit: string[];
+  order?: number;
 }
 
+export type MockingBirdItem = MockingBirdCheck | MockingBirdRange | MockingBirdInput | MockingBirdBtn | MockingBirdFolder | MockingBirdSelect;
 export type MockingBirdState = {
-  [key: string]: MockingBirdCheck | MockingBirdRange | MockingBirdInput | MockingBirdBtn | MockingBirdFolder | MockingBirdSelect;
+  [key: string]: MockingBirdItem;
 };
 
 export function detect(i) {
