@@ -175,6 +175,9 @@ function renderItem(state, key, parent, root) {
                 'margin-right': '10px',
             });
             var num = document.createElement('div');
+            util_1.applyStyle(num, {
+                'min-width': '40px',
+            });
             var i = document.createElement('input');
             util_1.applyStyle(i, {
                 width: '100%',
@@ -184,12 +187,13 @@ function renderItem(state, key, parent, root) {
             i.setAttribute('max', state.limit.max);
             i.setAttribute('step', state.limit.step);
             i.value = state.value;
-            if (state.immediatelyChange) {
-                i.addEventListener('input', function () {
-                    num.innerText = this.value;
-                    state.value = parseFloat(this.value);
-                });
-            }
+            i.addEventListener('input', function () {
+                num.innerText = this.value;
+                state.value = parseFloat(this.value);
+                if (state.immediatelyChange) {
+                    root.onChange();
+                }
+            });
             i.addEventListener('change', function () {
                 state.value = parseFloat(this.value);
                 state.onChange(state);
