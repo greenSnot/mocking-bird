@@ -177,7 +177,7 @@ function renderItem(state, key, parent, root) {
     content.appendChild(map[types_1.detect(state)]());
     return dom;
 }
-var MockingFrog = (function () {
+var MockingFrog = /** @class */ (function () {
     function MockingFrog(defaultStateMap, opt) {
         var _this = this;
         this.state = {};

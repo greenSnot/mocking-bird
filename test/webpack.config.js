@@ -1,3 +1,5 @@
+var TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
+
 module.exports = {
     entry: "./src/index.ts",
     output: {
@@ -10,7 +12,10 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: [".ts", ".tsx", ".js", ".json"],
+        plugins: [
+            new TsConfigPathsPlugin()
+        ]
     },
 
     module: {

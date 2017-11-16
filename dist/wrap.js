@@ -15,13 +15,12 @@ var defaultStyle = {
     height: '250px',
     'min-height': '200px',
     background: 'rgb(255, 255, 255)',
-    'box-shadow': '0px 3px 12px 4px #eee',
     position: 'fixed',
     border: '5px solid #fff',
     top: '20px',
     right: '20px',
 };
-var MockingFrogWrap = (function () {
+var MockingFrogWrap = /** @class */ (function () {
     function MockingFrogWrap(style) {
         this.style = defaultStyle;
         this.dom = document.createElement('div');

@@ -2,7 +2,7 @@
   "name": "mocking-frog",
   "version": "0.0.4",
   "scripts": {
-    "dev": "cd test && webpack-dev-server",
+    "dev": "tsc -w",
     "build": "tsc"
   },
   "main": "dist/index.js",
