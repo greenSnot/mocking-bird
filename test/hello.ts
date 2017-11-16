@@ -1,4 +1,4 @@
-import MockingFrog from 'mocking-frog';
+import { MockingFrog } from 'mocking-frog';
 
 const testState = {
   num: {

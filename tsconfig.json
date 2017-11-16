@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
-    "allowJs": true,
+    "allowJs": false,
     "moduleResolution": "node",
     "jsx": "react",
+    "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "mocking-frog": ["."]
-    },
-    "outDir": "dist"
+      "mocking-frog": ["src"]
+    }
   },
   "exclude": [
     "node_modules",
@@ -19,6 +19,7 @@
     "dist"
   ],
   "include": [
-    "src"
+    "src",
+    "test"
   ]
 }
