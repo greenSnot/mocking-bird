@@ -34,7 +34,6 @@ var PosPivot = /** @class */ (function (_super) {
         var lastRight;
         var downX, downY, isMoving;
         function onMouseDown(event) {
-            event.preventDefault();
             event.stopPropagation();
             lastTop = parseFloat(this.wrap.style.top);
             lastRight = parseFloat(this.wrap.style.right);
@@ -45,7 +44,6 @@ var PosPivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
-            event.preventDefault();
             event.stopPropagation();
             if (!isMoving) {
                 return;
@@ -57,7 +55,6 @@ var PosPivot = /** @class */ (function (_super) {
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
-            event.preventDefault();
             event.stopPropagation();
             isMoving = false;
         }

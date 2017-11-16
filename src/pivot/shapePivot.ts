@@ -19,7 +19,6 @@ export class ShapePivot extends Pivot {
     let lastH;
     let downX, downY, isMoving;
     function onMouseDown(event) {
-      event.preventDefault();
       event.stopPropagation();
       lastW = parseFloat(this.wrap.style.width);
       lastH = parseFloat(this.wrap.style.height);
@@ -30,7 +29,6 @@ export class ShapePivot extends Pivot {
       isMoving = true;
     }
     function onMouseMove(event) {
-      event.preventDefault();
       event.stopPropagation();
       if (!isMoving) {
         return;
@@ -42,7 +40,6 @@ export class ShapePivot extends Pivot {
       this.wrap.updateStyle();
     }
     function onMouseUp(event) {
-      event.preventDefault();
       event.stopPropagation();
       isMoving = false;
     }

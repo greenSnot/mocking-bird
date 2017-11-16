@@ -132,7 +132,14 @@ function renderItem(state, key, parent, root) {
       const i = document.createElement('input');
       i.setAttribute('type', 'input');
       i.value = state.value;
-      i.addEventListener('input', function(e) {
+      if (state.immediatelyChange) {
+        i.addEventListener('input', function (e) {
+          state.value = this.value;
+          state.onChange(state);
+          root.onChange();
+        });
+      }
+      i.addEventListener('change', function (e) {
         state.value = this.value;
         state.onChange(state);
         root.onChange();
@@ -178,10 +185,12 @@ function renderItem(state, key, parent, root) {
       i.setAttribute('max', state.limit.max);
       i.setAttribute('step', state.limit.step);
       i.value = state.value;
-      i.addEventListener('input', function() {
-        num.innerText = this.value;
-        state.value = parseFloat(this.value);
-      });
+      if (state.immediatelyChange) {
+        i.addEventListener('input', function () {
+          num.innerText = this.value;
+          state.value = parseFloat(this.value);
+        });
+      }
       i.addEventListener('change', function() {
         state.value = parseFloat(this.value);
         state.onChange(state);
@@ -294,7 +303,6 @@ export class MockingFrog {
     `));
     document.getElementsByTagName("head")[0].appendChild(css);
     document.body.appendChild(this.wrap.dom);
-    console.log(css);
     try {
       this.stateList = JSON.parse(localStorage.getItem('mockingfrog_state_list'));
       this.curState = localStorage.getItem('mockingfrog_cur_state');

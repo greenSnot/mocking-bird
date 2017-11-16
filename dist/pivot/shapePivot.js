@@ -34,7 +34,6 @@ var ShapePivot = /** @class */ (function (_super) {
         var lastH;
         var downX, downY, isMoving;
         function onMouseDown(event) {
-            event.preventDefault();
             event.stopPropagation();
             lastW = parseFloat(this.wrap.style.width);
             lastH = parseFloat(this.wrap.style.height);
@@ -45,7 +44,6 @@ var ShapePivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
-            event.preventDefault();
             event.stopPropagation();
             if (!isMoving) {
                 return;
@@ -57,7 +55,6 @@ var ShapePivot = /** @class */ (function (_super) {
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
-            event.preventDefault();
             event.stopPropagation();
             isMoving = false;
         }

@@ -20,6 +20,7 @@ export type MockingFrogCheck = MockingFrogEvent & {
 
 export type MockingFrogInput = MockingFrogEvent & {
   value: string;
+  immediatelyChange?: boolean;
   order?: number;
 }
 
@@ -30,6 +31,7 @@ export type MockingFrogRange = MockingFrogEvent & {
     max: number;
     step: number;
   }
+  immediatelyChange?: boolean;
   order?: number;
 }
 
