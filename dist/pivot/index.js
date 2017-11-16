@@ -10,7 +10,7 @@ exports.pivotBaseStyle = {
     'box-shadow': '#ccc 0px 1px 4px 3px',
     'z-index': 10,
 };
-var Pivot = /** @class */ (function () {
+var Pivot = (function () {
     function Pivot(wrap) {
         this.style = {};
         this.wrap = wrap;

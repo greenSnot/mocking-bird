@@ -2,7 +2,7 @@ module.exports = {
     entry: "./src/index.ts",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/build"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -25,4 +25,6 @@ module.exports = {
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
     },
+
+    watch: true,
 };

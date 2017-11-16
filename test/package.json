@@ -1,0 +1,14 @@
+{
+  "name": "mocking-frog-test",
+  "dependencies": {
+    "@shopify/draggable": "^1.0.0-beta.3",
+    "mocking-frog": "0.0.3",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.3.0",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.6.1"
+  }
+}

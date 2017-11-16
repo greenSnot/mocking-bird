@@ -19,7 +19,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var _1 = require("./");
-var ShapePivot = /** @class */ (function (_super) {
+var ShapePivot = (function (_super) {
     __extends(ShapePivot, _super);
     function ShapePivot(wrap) {
         var _this = _super.call(this, wrap) || this;

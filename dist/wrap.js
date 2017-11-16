@@ -21,7 +21,7 @@ var defaultStyle = {
     top: '20px',
     right: '20px',
 };
-var MockingFrogWrap = /** @class */ (function () {
+var MockingFrogWrap = (function () {
     function MockingFrogWrap(style) {
         this.style = defaultStyle;
         this.dom = document.createElement('div');
