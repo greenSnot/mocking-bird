@@ -23,6 +23,10 @@ export class MockingFrogWrap {
       ...this.style,
       ...style,
     } : this.style;
+    this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
+    this.style.height = localStorage.getItem('mocking_frog_wrap_height') || this.style.height;
+    this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;
+    this.style.right = localStorage.getItem('mocking_frog_wrap_right') || this.style.right;
     applyStyle(this.dom, {
       display: '-webkit-box',
       '-webkit-box-orient': 'vertical',
@@ -36,6 +40,10 @@ export class MockingFrogWrap {
     this.updateStyle();
   }
   updateStyle() {
+    localStorage.setItem('mocking_frog_wrap_width', this.style.width);
+    localStorage.setItem('mocking_frog_wrap_height', this.style.height);
+    localStorage.setItem('mocking_frog_wrap_top', this.style.top);
+    localStorage.setItem('mocking_frog_wrap_right', this.style.right);
     Object.keys(this.style).forEach(v => {
       this.dom.style[v] = this.style[v];
     });

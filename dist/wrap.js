@@ -26,6 +26,10 @@ var MockingFrogWrap = /** @class */ (function () {
         this.style = defaultStyle;
         this.dom = document.createElement('div');
         this.style = style ? __assign({}, this.style, style) : this.style;
+        this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
+        this.style.height = localStorage.getItem('mocking_frog_wrap_height') || this.style.height;
+        this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;
+        this.style.right = localStorage.getItem('mocking_frog_wrap_right') || this.style.right;
         util_1.applyStyle(this.dom, {
             display: '-webkit-box',
             '-webkit-box-orient': 'vertical',
@@ -40,6 +44,10 @@ var MockingFrogWrap = /** @class */ (function () {
     }
     MockingFrogWrap.prototype.updateStyle = function () {
         var _this = this;
+        localStorage.setItem('mocking_frog_wrap_width', this.style.width);
+        localStorage.setItem('mocking_frog_wrap_height', this.style.height);
+        localStorage.setItem('mocking_frog_wrap_top', this.style.top);
+        localStorage.setItem('mocking_frog_wrap_right', this.style.right);
         Object.keys(this.style).forEach(function (v) {
             _this.dom.style[v] = _this.style[v];
         });
