@@ -18,3 +18,22 @@ export function toStr(json) {
   }
   return json.toString();
 }
+
+export function findClosestState(state, stateItem, gt = true) {
+  const order = stateItem.order;
+  let ltState;
+  let ltOrder = -1;
+  let gtState;
+  let gtOrder = 999;
+  Object.keys(state).forEach(i => {
+    if (state[i].order < order && state[i].order > ltOrder) {
+      ltOrder = state[i].order;
+      ltState = state[i];
+    }
+    if (state[i].order > order && state[i].order < gtOrder) {
+      gtOrder = state[i].order;
+      gtState = state[i];
+    }
+  });
+  return gt ? gtState : ltState;
+}

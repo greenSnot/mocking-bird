@@ -2,9 +2,9 @@ import { MockingBirdState, MockingBirdItem, detect } from './types';
 import { MockingBirdWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
-import { applyStyle, toStr } from './util';
+import { applyStyle, toStr, findClosestState } from './util';
 
-function renderItem(state, key, root) {
+function renderItem(state, key, parent, root) {
   const dom = document.createElement('div');
   const content = document.createElement('div');
   const contentStyle = {
@@ -23,9 +23,58 @@ function renderItem(state, key, root) {
   applyStyle(content, contentStyle);
 
   const name = document.createElement('div');
-  dom.appendChild(name);
+  const nameWrap = document.createElement('div');
+  applyStyle(nameWrap, {
+    display: '-webkit-box',
+  });
+  const orderUp = document.createElement('div');
+  const orderDown = document.createElement('div');
+  const orderWrap = document.createElement('div');
+  applyStyle(orderWrap, {
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    'margin-right': '5px',
+  });
+  applyStyle(orderUp, {
+    width: '0px',
+    'border-bottom': '10px solid #fff',
+    'border-left': '5px solid transparent',
+    'border-right': '5px solid transparent',
+    'margin-bottom': '2px',
+  });
+  applyStyle(orderDown, {
+    width: '0px',
+    'border-top': '10px solid #fff',
+    'border-left': '5px solid transparent',
+    'border-right': '5px solid transparent',
+  });
+  dom.appendChild(nameWrap);
   dom.appendChild(content);
   name.innerText = key;
+  orderWrap.appendChild(orderUp);
+  orderWrap.appendChild(orderDown);
+  nameWrap.appendChild(orderWrap);
+  nameWrap.appendChild(name);
+  orderUp.addEventListener('click', () => {
+    const closest = findClosestState(parent, state, false);
+    if (closest) {
+      const order = closest.order;
+      closest.order = state.order;
+      state.order = order;
+      root.update();
+      root.save();
+    }
+  });
+  orderDown.addEventListener('click', () => {
+    const closest = findClosestState(parent, state);
+    if (closest) {
+      const order = closest.order;
+      closest.order = state.order;
+      state.order = order;
+      root.update();
+      root.save();
+    }
+  });
 
   const map = {
     folder: () => {
@@ -40,9 +89,9 @@ function renderItem(state, key, root) {
       i.appendChild(btn);
       const wrap = new MockingBirdWrap();
       wrap.content.style.display = state.active ? 'block' : 'none';
-      Object.keys(state.value).forEach(k => {
+      Object.keys(state.value).sort((a, b) => state.value[a].order > state.value[b].order ? 1 : -1).forEach(k => {
         const item = state.value[k];
-        wrap.content.appendChild(renderItem(item, k, root));
+        wrap.content.appendChild(renderItem(item, k, state.value, root));
       });
       btn.addEventListener('click', () => {
         state.active = wrap.content.style.display === 'none';
@@ -183,7 +232,7 @@ class MockingBird {
     this.wrap.content.innerHTML = '';
     Object.keys(this.state).sort((a, b) => (this.state[a].order > this.state[b].order ? 1 : -1)).forEach(k => {
       const item = this.state[k];
-      this.wrap.content.appendChild(renderItem(item, k, this));
+      this.wrap.content.appendChild(renderItem(item, k, this.state, this));
     });
   }
   onChange() {
