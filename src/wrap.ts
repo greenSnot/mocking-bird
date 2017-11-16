@@ -1,15 +1,16 @@
 import { applyStyle } from './util';
 
 const defaultStyle = {
-  width: '200px',
-  'min-width': '200px',
+  width: '316px',
+  'min-width': '316px',
   height: '250px',
   'min-height': '200px',
-  background: 'rgb(255, 255, 255)',
+  border: '5px solid rgba(235, 235, 235, 0.54)',
   position: 'fixed',
-  border: '5px solid #fff',
   top: '20px',
   right: '20px',
+  'transform-origin': '100% 0',
+  transform: 'scale(' + window.devicePixelRatio + ')',
 };
 
 export class MockingFrogWrap {

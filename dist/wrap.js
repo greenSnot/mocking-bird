@@ -10,15 +10,16 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var util_1 = require("./util");
 var defaultStyle = {
-    width: '200px',
-    'min-width': '200px',
+    width: '316px',
+    'min-width': '316px',
     height: '250px',
     'min-height': '200px',
-    background: 'rgb(255, 255, 255)',
+    border: '5px solid rgba(235, 235, 235, 0.54)',
     position: 'fixed',
-    border: '5px solid #fff',
     top: '20px',
     right: '20px',
+    'transform-origin': '100% 0',
+    transform: 'scale(' + window.devicePixelRatio + ')',
 };
 var MockingFrogWrap = /** @class */ (function () {
     function MockingFrogWrap(style) {

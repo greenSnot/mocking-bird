@@ -34,6 +34,8 @@ var ShapePivot = /** @class */ (function (_super) {
         var lastH;
         var downX, downY, isMoving;
         function onMouseDown(event) {
+            event.preventDefault();
+            event.stopPropagation();
             lastW = parseFloat(this.wrap.style.width);
             lastH = parseFloat(this.wrap.style.height);
             var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -43,16 +45,20 @@ var ShapePivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
+            event.preventDefault();
+            event.stopPropagation();
             if (!isMoving) {
                 return;
             }
-            var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].pageX);
-            var y = Math.floor(event.clientY >= 0 ? event.clientY : event.touches[event.touches.length - 1].pageY);
-            this.wrap.style.width = lastW + downX - x + 'px';
-            this.wrap.style.height = lastH + y - downY + 'px';
+            var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
+            var y = Math.floor(event.clientY >= 0 ? event.clientY : event.touches[event.touches.length - 1].clientY);
+            this.wrap.style.width = lastW + (downX - x) / window.devicePixelRatio + 'px';
+            this.wrap.style.height = lastH + (y - downY) / window.devicePixelRatio + 'px';
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
+            event.preventDefault();
+            event.stopPropagation();
             isMoving = false;
         }
         this.dom.addEventListener('mousedown', function (e) { return onMouseDown.bind(_this)(e); });

@@ -34,6 +34,8 @@ var PosPivot = /** @class */ (function (_super) {
         var lastRight;
         var downX, downY, isMoving;
         function onMouseDown(event) {
+            event.preventDefault();
+            event.stopPropagation();
             lastTop = parseFloat(this.wrap.style.top);
             lastRight = parseFloat(this.wrap.style.right);
             var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -43,22 +45,26 @@ var PosPivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
+            event.preventDefault();
+            event.stopPropagation();
             if (!isMoving) {
                 return;
             }
-            var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].pageX);
-            var y = Math.floor(event.clientY >= 0 ? event.clientY : event.touches[event.touches.length - 1].pageY);
+            var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
+            var y = Math.floor(event.clientY >= 0 ? event.clientY : event.touches[event.touches.length - 1].clientY);
             this.wrap.style.right = lastRight + downX - x + 'px';
             this.wrap.style.top = lastTop + y - downY + 'px';
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
+            event.preventDefault();
+            event.stopPropagation();
             isMoving = false;
         }
         this.dom.addEventListener('mousedown', function (e) { return onMouseDown.bind(_this)(e); });
         this.dom.addEventListener('touchstart', function (e) { return onMouseDown.bind(_this)(e); });
-        document.body.addEventListener('mousemove', function (e) { return onMouseMove.bind(_this)(e); });
-        document.body.addEventListener('touchmove', function (e) { return onMouseMove.bind(_this)(e); });
+        this.dom.addEventListener('mousemove', function (e) { return onMouseMove.bind(_this)(e); });
+        this.dom.addEventListener('touchmove', function (e) { return onMouseMove.bind(_this)(e); });
         this.dom.addEventListener('mouseup', function (e) { return onMouseUp.bind(_this)(e); });
         this.dom.addEventListener('touchend', function (e) { return onMouseUp.bind(_this)(e); });
     };

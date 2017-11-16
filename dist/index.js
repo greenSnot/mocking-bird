@@ -26,6 +26,9 @@ function renderItem(state, key, parent, root) {
     var nameWrap = document.createElement('div');
     util_1.applyStyle(nameWrap, {
         display: '-webkit-box',
+        'margin-right': '10px',
+        height: '40px',
+        '-webkit-box-align': 'center',
     });
     var orderUp = document.createElement('div');
     var orderDown = document.createElement('div');
@@ -126,6 +129,7 @@ function renderItem(state, key, parent, root) {
         },
         input: function () {
             var i = document.createElement('input');
+            i.setAttribute('type', 'input');
             i.value = state.value;
             i.addEventListener('input', function (e) {
                 state.value = this.value;
@@ -185,11 +189,17 @@ var MockingFrog = /** @class */ (function () {
         this.stateList = [];
         this.stateIdToStr = {};
         this.wrap = new wrap_1.MockingFrogWrap(opt.style);
+        this.wrap.dom.className = 'mocking-frog';
         this.shapePivot = new shapePivot_1.ShapePivot(this.wrap);
         this.posPivot = new posPivot_1.PosPivot(this.wrap);
         this.wrap.dom.appendChild(this.shapePivot.dom);
         this.wrap.dom.appendChild(this.posPivot.dom);
+        var css = document.createElement('style');
+        css.type = 'text/css';
+        css.appendChild(document.createTextNode("\n      .mocking-frog * {\n        font-size: " + 12 * window.devicePixelRatio + "px;\n        color: #fff;\n        font-family: arial,sans-serif;\n      }\n      .mocking-frog input {\n        background: transparent;\n        border: 0;\n        height: 40px;\n        border-bottom: 1px solid #fff;\n      }\n      .mocking-frog input[type=\"input\"] {\n        width: 100%;\n      }\n      .mocking-frog select {\n        border: 1px solid #fff;\n        background: transparent;\n        border-radius: 0;\n        height: 35px;\n      }\n      .mocking-frog input[type=\"checkbox\"] {\n        width: 30px;\n        height: 30px;\n      }\n    "));
+        document.getElementsByTagName("head")[0].appendChild(css);
         document.body.appendChild(this.wrap.dom);
+        console.log(css);
         try {
             this.stateList = JSON.parse(localStorage.getItem('mockingfrog_state_list'));
             this.curState = localStorage.getItem('mockingfrog_cur_state');
@@ -240,7 +250,7 @@ var MockingFrog = /** @class */ (function () {
         this.panel = document.createElement('div');
         util_1.applyStyle(this.panel, {
             background: '#ff9800',
-            height: '30px',
+            height: '50px',
             'margin-top': '5px',
             display: '-webkit-box',
             '-webkit-box-pack': 'end',
