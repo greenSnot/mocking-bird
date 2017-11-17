@@ -66,3 +66,7 @@ export function findClosestState(state, stateItem, gt = true) {
   });
   return gt ? gtState : ltState;
 }
+
+export let STORAGE_STATE_LIST = 'mockingfrog_state_list_' + md5(location.href);
+export let STORAGE_CUR_STATE = 'mockingfrog_cur_state_' + md5(location.href);
+export let STORAGE_STATE_PREFIX = 'mockingfrog_state_' + md5(location.href) + '_';

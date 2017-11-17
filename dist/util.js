@@ -68,3 +68,6 @@ function findClosestState(state, stateItem, gt) {
     return gt ? gtState : ltState;
 }
 exports.findClosestState = findClosestState;
+exports.STORAGE_STATE_LIST = 'mockingfrog_state_list_' + md5(location.href);
+exports.STORAGE_CUR_STATE = 'mockingfrog_cur_state_' + md5(location.href);
+exports.STORAGE_STATE_PREFIX = 'mockingfrog_state_' + md5(location.href) + '_';

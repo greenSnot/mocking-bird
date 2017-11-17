@@ -230,10 +230,10 @@ var MockingFrog = /** @class */ (function () {
         document.getElementsByTagName("head")[0].appendChild(css);
         document.body.appendChild(this.wrap.dom);
         try {
-            this.stateList = JSON.parse(localStorage.getItem('mockingfrog_state_list'));
-            this.curState = localStorage.getItem('mockingfrog_cur_state');
+            this.stateList = JSON.parse(localStorage.getItem(util_1.STORAGE_STATE_LIST));
+            this.curState = localStorage.getItem(util_1.STORAGE_CUR_STATE);
             this.stateList.forEach(function (k) {
-                _this.stateIdToStr[k] = localStorage.getItem('mockingfrog_state_id_' + k);
+                _this.stateIdToStr[k] = localStorage.getItem(util_1.STORAGE_STATE_PREFIX + k);
             });
             this.changeState(this.curState);
         }
@@ -338,7 +338,7 @@ var MockingFrog = /** @class */ (function () {
             }
             _this.stateList = _this.stateList.filter(function (i) { return i !== _this.curState; });
             _this.curState = _this.stateList[0];
-            localStorage.removeItem('mockingfrog_state_id_' + _this.curState);
+            localStorage.removeItem(util_1.STORAGE_STATE_PREFIX + _this.curState);
             _this.changeState(_this.curState);
             _this.updateStateList();
         });
@@ -370,14 +370,14 @@ var MockingFrog = /** @class */ (function () {
         this.saveStateDetail();
     };
     MockingFrog.prototype.saveStateList = function () {
-        localStorage.setItem('mockingfrog_state_list', JSON.stringify(this.stateList));
+        localStorage.setItem(util_1.STORAGE_STATE_LIST, JSON.stringify(this.stateList));
     };
     MockingFrog.prototype.saveCurState = function () {
-        localStorage.setItem('mockingfrog_cur_state', this.curState);
+        localStorage.setItem(util_1.STORAGE_CUR_STATE, this.curState);
     };
     MockingFrog.prototype.saveStateDetail = function () {
         this.stateIdToStr[this.curState] = util_1.toStr(this.state);
-        localStorage.setItem('mockingfrog_state_id_' + this.curState, this.stateIdToStr[this.curState]);
+        localStorage.setItem(util_1.STORAGE_STATE_PREFIX + this.curState, this.stateIdToStr[this.curState]);
     };
     return MockingFrog;
 }());

@@ -2,7 +2,16 @@ import { MockingFrogState, MockingFrogItem, detect } from './types';
 import { MockingFrogWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
-import { applyStyle, toStr, findClosestState, functionMap, initFunctionMap } from './util';
+import {
+  STORAGE_CUR_STATE,
+  STORAGE_STATE_LIST,
+  STORAGE_STATE_PREFIX,
+  applyStyle,
+  toStr,
+  findClosestState,
+  functionMap,
+  initFunctionMap
+} from './util';
 
 function renderItem(state, key, parent, root) {
   const dom = document.createElement('div');
@@ -309,10 +318,10 @@ export class MockingFrog {
     document.getElementsByTagName("head")[0].appendChild(css);
     document.body.appendChild(this.wrap.dom);
     try {
-      this.stateList = JSON.parse(localStorage.getItem('mockingfrog_state_list'));
-      this.curState = localStorage.getItem('mockingfrog_cur_state');
+      this.stateList = JSON.parse(localStorage.getItem(STORAGE_STATE_LIST));
+      this.curState = localStorage.getItem(STORAGE_CUR_STATE);
       this.stateList.forEach(k => {
-        this.stateIdToStr[k] = localStorage.getItem('mockingfrog_state_id_' + k);
+        this.stateIdToStr[k] = localStorage.getItem(STORAGE_STATE_PREFIX + k);
       });
       this.changeState(this.curState);
     } catch (e) {
@@ -412,7 +421,7 @@ export class MockingFrog {
       }
       this.stateList = this.stateList.filter(i => i !== this.curState);
       this.curState = this.stateList[0];
-      localStorage.removeItem('mockingfrog_state_id_' + this.curState);
+      localStorage.removeItem(STORAGE_STATE_PREFIX + this.curState);
       this.changeState(this.curState);
       this.updateStateList();
     });
@@ -443,13 +452,13 @@ export class MockingFrog {
     this.saveStateDetail();
   }
   saveStateList() {
-    localStorage.setItem('mockingfrog_state_list', JSON.stringify(this.stateList));
+    localStorage.setItem(STORAGE_STATE_LIST, JSON.stringify(this.stateList));
   }
   saveCurState() {
-    localStorage.setItem('mockingfrog_cur_state', this.curState);
+    localStorage.setItem(STORAGE_CUR_STATE, this.curState);
   }
   saveStateDetail() {
     this.stateIdToStr[this.curState] = toStr(this.state);
-    localStorage.setItem('mockingfrog_state_id_' + this.curState, this.stateIdToStr[this.curState]);
+    localStorage.setItem(STORAGE_STATE_PREFIX + this.curState, this.stateIdToStr[this.curState]);
   }
 }
