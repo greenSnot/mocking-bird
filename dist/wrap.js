@@ -16,6 +16,7 @@ var defaultStyle = {
     'min-height': '200px',
     border: '5px solid rgba(235, 235, 235, 0.54)',
     position: 'fixed',
+    'z-index': 1000,
     top: '20px',
     right: '20px',
     'transform-origin': '100% 0',

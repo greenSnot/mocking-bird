@@ -1,5 +1,5 @@
 export type MockingFrogEvent = {
-  onChange: Function;
+  onChange?: Function;
 }
 
 export type MockingFrogBtn = {
