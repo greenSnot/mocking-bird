@@ -9,35 +9,45 @@ function applyStyle(dom, style) {
 exports.applyStyle = applyStyle;
 var functionId = 0;
 exports.functionMap = {};
-function toStr(json) {
+function doToStr(json) {
     if (typeof json === 'object') {
         if (json.length) {
             return '[' + json.map(function (i) { return toStr(i); }).join(',') + ']';
         }
         return '{' + Object.keys(json).map(function (key) {
-            return key + ':' + toStr(json[key]);
+            return key + ':' + doToStr(json[key]);
         }).join(',') + '}';
     }
     if (typeof json === 'string') {
         return "'" + json + "'";
     }
     if (typeof json === 'function') {
-        var id = md5(json.toString());
+        var id = md5(json.toString()) + (functionId++);
         return "'" + id + "'";
     }
     return json.toString();
 }
+exports.doToStr = doToStr;
+function toStr(json) {
+    functionId = 0;
+    doToStr(json);
+}
 exports.toStr = toStr;
 function initFunctionMap(json) {
+    functionId = 0;
+    doInitFunctionMap(json);
+}
+exports.initFunctionMap = initFunctionMap;
+function doInitFunctionMap(json) {
     if (typeof json === 'object') {
-        Object.keys(json).forEach(function (i) { return initFunctionMap(json[i]); });
+        Object.keys(json).forEach(function (i) { return doInitFunctionMap(json[i]); });
     }
     if (typeof json === 'function') {
-        var id = md5(json.toString());
+        var id = md5(json.toString()) + (functionId++);
         exports.functionMap[id] = json;
     }
 }
-exports.initFunctionMap = initFunctionMap;
+exports.doInitFunctionMap = doInitFunctionMap;
 function findClosestState(state, stateItem, gt) {
     if (gt === void 0) { gt = true; }
     var order = stateItem.order;

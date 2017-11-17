@@ -9,31 +9,41 @@ export function applyStyle(dom, style) {
 let functionId = 0;
 export let functionMap = {};
 
-export function toStr(json) {
+export function doToStr(json) {
   if (typeof json === 'object') {
     if (json.length) {
       return '[' + json.map(i => toStr(i)).join(',') + ']';
     }
     return '{' + Object.keys(json).map(key => {
-      return key + ':' + toStr(json[key]);
+      return key + ':' + doToStr(json[key]);
     }).join(',') + '}';
   }
   if (typeof json === 'string') {
     return `'${json}'`;
   }
   if (typeof json === 'function') {
-    const id = md5(json.toString());
+    const id = md5(json.toString()) + (functionId ++);
     return `'${id}'`;
   }
   return json.toString();
 }
 
+export function toStr(json) {
+  functionId = 0;
+  doToStr(json);
+}
+
 export function initFunctionMap(json) {
+  functionId = 0;
+  doInitFunctionMap(json);
+}
+
+export function doInitFunctionMap(json) {
   if (typeof json === 'object') {
-    Object.keys(json).forEach(i => initFunctionMap(json[i]));
+    Object.keys(json).forEach(i => doInitFunctionMap(json[i]));
   }
   if (typeof json === 'function') {
-    const id = md5(json.toString());
+    const id = md5(json.toString()) + (functionId ++);
     functionMap[id] = json;
   }
 }
