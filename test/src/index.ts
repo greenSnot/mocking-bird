@@ -8,7 +8,7 @@ const testState = {
       max: 10,
       step: 0.1,
     },
-    onChange: () => console.log('num1'),
+    onChange: () => console.log(MockingFrog),
   },
   num2: {
     value: 3,
@@ -85,7 +85,7 @@ new MockingFrog({
   'default': testState
 }, {
   curState: 'default',
-  scale: devicePixelRatio,
+  scale: 2,
   style: {
     width: '270px',
   },

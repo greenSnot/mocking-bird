@@ -1,8 +1,13 @@
+import * as md5 from 'md5';
+
 export function applyStyle(dom, style) {
   Object.keys(style).forEach(v => {
     dom.style[v] = style[v];
   });
 }
+
+let functionId = 0;
+export let functionMap = {};
 
 export function toStr(json) {
   if (typeof json === 'object') {
@@ -16,7 +21,21 @@ export function toStr(json) {
   if (typeof json === 'string') {
     return `'${json}'`;
   }
+  if (typeof json === 'function') {
+    const id = md5(json.toString());
+    return `'${id}'`;
+  }
   return json.toString();
+}
+
+export function initFunctionMap(json) {
+  if (typeof json === 'object') {
+    Object.keys(json).forEach(i => initFunctionMap(json[i]));
+  }
+  if (typeof json === 'function') {
+    const id = md5(json.toString());
+    functionMap[id] = json;
+  }
 }
 
 export function findClosestState(state, stateItem, gt = true) {

@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var md5 = require("md5");
 function applyStyle(dom, style) {
     Object.keys(style).forEach(function (v) {
         dom.style[v] = style[v];
     });
 }
 exports.applyStyle = applyStyle;
+var functionId = 0;
+exports.functionMap = {};
 function toStr(json) {
     if (typeof json === 'object') {
         if (json.length) {
@@ -18,9 +21,23 @@ function toStr(json) {
     if (typeof json === 'string') {
         return "'" + json + "'";
     }
+    if (typeof json === 'function') {
+        var id = md5(json.toString());
+        return "'" + id + "'";
+    }
     return json.toString();
 }
 exports.toStr = toStr;
+function initFunctionMap(json) {
+    if (typeof json === 'object') {
+        Object.keys(json).forEach(function (i) { return initFunctionMap(json[i]); });
+    }
+    if (typeof json === 'function') {
+        var id = md5(json.toString());
+        exports.functionMap[id] = json;
+    }
+}
+exports.initFunctionMap = initFunctionMap;
 function findClosestState(state, stateItem, gt) {
     if (gt === void 0) { gt = true; }
     var order = stateItem.order;

@@ -216,6 +216,7 @@ var MockingFrog = /** @class */ (function () {
         this.curState = 'temp';
         this.stateList = [];
         this.stateIdToStr = {};
+        util_1.initFunctionMap(defaultStateMap);
         this.scale = opt.scale || 1;
         this.wrap = new wrap_1.MockingFrogWrap(this.scale, opt.style);
         this.wrap.dom.className = 'mocking-frog';
@@ -271,7 +272,20 @@ var MockingFrog = /** @class */ (function () {
     };
     MockingFrog.prototype.changeState = function (id) {
         this.curState = id;
-        this.state = eval('(() => (' + this.stateIdToStr[id] + '))()');
+        this.state = eval('(function(){return ' + this.stateIdToStr[id] + ';})()');
+        function restoreFunction(s) {
+            Object.keys(s).forEach(function (k) {
+                Object.keys(s[k]).forEach(function (i) {
+                    if (typeof s[k][i] === 'string' && util_1.functionMap[s[k][i]]) {
+                        s[k][i] = util_1.functionMap[s[k][i]];
+                    }
+                });
+                if (types_1.detect(s[k]) === 'folder') {
+                    restoreFunction(s[k].value);
+                }
+            });
+        }
+        restoreFunction(this.state);
         this.update();
     };
     MockingFrog.prototype.initPanel = function () {

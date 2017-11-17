@@ -2,7 +2,7 @@ import { MockingFrogState, MockingFrogItem, detect } from './types';
 import { MockingFrogWrap } from './wrap';
 import { PosPivot } from './pivot/posPivot';
 import { ShapePivot } from './pivot/shapePivot';
-import { applyStyle, toStr, findClosestState } from './util';
+import { applyStyle, toStr, findClosestState, functionMap, initFunctionMap } from './util';
 
 function renderItem(state, key, parent, root) {
   const dom = document.createElement('div');
@@ -233,6 +233,7 @@ export class MockingFrog {
     scale: number,
     style: any,
   }) {
+    initFunctionMap(defaultStateMap);
     this.scale = opt.scale || 1;
     this.wrap = new MockingFrogWrap(this.scale, opt.style);
     this.wrap.dom.className = 'mocking-frog';
@@ -347,7 +348,20 @@ export class MockingFrog {
   }
   changeState(id) {
     this.curState = id;
-    this.state = eval('(() => (' + this.stateIdToStr[id] + '))()');
+    this.state = eval('(function(){return ' + this.stateIdToStr[id] + ';})()');
+    function restoreFunction(s) {
+      Object.keys(s).forEach(k => {
+        Object.keys(s[k]).forEach(i => {
+          if (typeof s[k][i] === 'string' && functionMap[s[k][i]]) {
+            s[k][i] = functionMap[s[k][i]];
+          }
+        });
+        if (detect(s[k]) === 'folder') {
+          restoreFunction(s[k].value);
+        }
+      });
+    }
+    restoreFunction(this.state);
     this.update();
   }
   initPanel() {
