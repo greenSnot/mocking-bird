@@ -101,7 +101,7 @@ function renderItem(state, key, parent, root, depth) {
                 wrap.content.style.display = state.active ? 'block' : 'none';
                 btn.innerText = state.active ? '-' : '+';
                 state.onChange && state.onChange(state);
-                root.onChange();
+                root.onChange(state);
             });
             i.appendChild(wrap.content);
             return i;
@@ -118,7 +118,7 @@ function renderItem(state, key, parent, root, depth) {
             select.addEventListener('change', function (e) {
                 state.value = this.value;
                 state.onChange && state.onChange(state);
-                root.onChange();
+                root.onChange(state);
             });
             return select;
         },
@@ -139,13 +139,13 @@ function renderItem(state, key, parent, root, depth) {
                 i.addEventListener('input', function (e) {
                     state.value = this.value;
                     state.onChange && state.onChange(state);
-                    root.onChange();
+                    root.onChange(state);
                 });
             }
             i.addEventListener('change', function (e) {
                 state.value = this.value;
                 state.onChange && state.onChange(state);
-                root.onChange();
+                root.onChange(state);
             });
             return i;
         },
@@ -156,7 +156,7 @@ function renderItem(state, key, parent, root, depth) {
             i.addEventListener('change', function () {
                 state.value = this.checked;
                 state.onChange && state.onChange(state);
-                root.onChange();
+                root.onChange(state);
             });
             return i;
         },
@@ -196,13 +196,13 @@ function renderItem(state, key, parent, root, depth) {
                 num.innerText = this.value;
                 state.value = parseFloat(this.value);
                 if (state.immediatelyChange) {
-                    root.onChange();
+                    root.onChange(state);
                 }
             });
             i.addEventListener('change', function () {
                 state.value = parseFloat(this.value);
                 state.onChange && state.onChange(state);
-                root.onChange();
+                root.onChange(state);
             });
             num.innerText = state.value;
             rangeWrap.appendChild(i);
@@ -215,15 +215,16 @@ function renderItem(state, key, parent, root, depth) {
     return dom;
 }
 var MockingFrog = /** @class */ (function () {
-    function MockingFrog(defaultStateMap, opt) {
+    function MockingFrog(defaultStateMap, curState, opt) {
         var _this = this;
         this.state = {};
         this.curState = 'temp';
         this.stateList = [];
         this.stateIdToStr = {};
+        this.opt = opt || {};
         util_1.initFunctionMap(defaultStateMap);
-        this.scale = opt.scale || 1;
-        this.wrap = new wrap_1.MockingFrogWrap(this.scale, opt.style);
+        this.scale = this.opt.scale || 1;
+        this.wrap = new wrap_1.MockingFrogWrap(this.scale, this.opt.style);
         this.wrap.dom.className = 'mocking-frog';
         this.shapePivot = new shapePivot_1.ShapePivot(this.wrap);
         this.posPivot = new posPivot_1.PosPivot(this.wrap);
@@ -272,8 +273,13 @@ var MockingFrog = /** @class */ (function () {
             _this.wrap.content.appendChild(renderItem(item, k, _this.state, _this));
         });
     };
-    MockingFrog.prototype.onChange = function () {
-        this.save();
+    MockingFrog.prototype.onChange = function (state) {
+        if (this.opt.onChange) {
+            this.opt.onChange(state);
+        }
+        else {
+            this.save();
+        }
     };
     MockingFrog.prototype.changeState = function (id) {
         this.curState = id;

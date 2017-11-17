@@ -81,12 +81,12 @@ const testState = {
   },
 };
 
-new MockingFrog({
+const ins = new MockingFrog({
   'default': testState
-}, {
-  curState: 'default',
+}, 'default', {
   scale: 2,
-  style: {
-    width: '270px',
+  onChange: () => {
+    console.log('onChange');
+    ins.save();
   },
 });
