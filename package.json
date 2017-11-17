@@ -1,6 +1,6 @@
 {
   "name": "mocking-frog",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc"

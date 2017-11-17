@@ -346,7 +346,7 @@ export class MockingFrog {
       this.changeState(this.curState);
     } catch (e) {
       this.stateList = Object.keys(defaultStateMap);
-      this.curState = opt.curState;
+      this.curState = curState;
       this.initOrder(defaultStateMap[this.curState]);
       this.stateList.forEach(i => {
         this.stateIdToStr[i] = toStr(defaultStateMap[i]);
