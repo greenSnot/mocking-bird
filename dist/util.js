@@ -22,7 +22,7 @@ function doToStr(json) {
         return "'" + json + "'";
     }
     if (typeof json === 'function') {
-        var id = md5(json.toString()) + (functionId++);
+        var id = json.id;
         return "'" + id + "'";
     }
     return json.toString();
@@ -43,7 +43,8 @@ function doInitFunctionMap(json) {
         Object.keys(json).forEach(function (i) { return doInitFunctionMap(json[i]); });
     }
     if (typeof json === 'function') {
-        var id = md5(json.toString()) + (functionId++);
+        var id = functionId++;
+        json.id = id;
         exports.functionMap[id] = json;
     }
 }
