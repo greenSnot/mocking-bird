@@ -26,7 +26,7 @@ function renderItem(state, key, parent, root) {
     display: '-webkit-box',
     'margin-bottom': '5px',
     padding: '5px 10px 5px 10px',
-    background: '#ffc107',
+    background: 'rgba(255, 193, 7, 0.7)',
     color: '#fff',
   });
   applyStyle(content, contentStyle);
@@ -175,6 +175,7 @@ function renderItem(state, key, parent, root) {
         '-webkit-box-align': 'center',
         height: '40px',
         width: '100%',
+        'min-width': '100px',
       });
       applyStyle(rangeWrap, {
         display: '-webkit-box',
@@ -257,6 +258,13 @@ export class MockingFrog {
         font-size: ${12 * opt.scale}px;
         color: #fff;
         font-family: arial,sans-serif;
+      }
+      .mocking-frog[hide="1"] {
+        border: none!important;
+        min-width: 0!important;
+        min-height: 0!important;
+        width: 0!important;
+        height: 0!important;
       }
       .mocking-frog input {
         background: transparent;

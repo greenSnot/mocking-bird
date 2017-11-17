@@ -15,16 +15,19 @@ var defaultStyle = {
     height: '250px',
     'min-height': '200px',
     border: '5px solid rgba(235, 235, 235, 0.54)',
+    background: 'rgba(255, 255, 255, 0.5)',
     position: 'fixed',
     'z-index': 1000,
     top: '20px',
     right: '20px',
     'transform-origin': '100% 0',
+    'box-sizing': 'border-box',
     transform: '',
 };
 var MockingFrogWrap = /** @class */ (function () {
     function MockingFrogWrap(scale, style) {
         this.style = defaultStyle;
+        this.show = true;
         this.dom = document.createElement('div');
         this.style = style ? __assign({}, this.style, style) : this.style;
         this.scale = scale;
@@ -45,6 +48,10 @@ var MockingFrogWrap = /** @class */ (function () {
         this.dom.appendChild(this.content);
         this.updateStyle();
     }
+    MockingFrogWrap.prototype.setVisibility = function (show) {
+        this.show = show;
+        this.dom.setAttribute('hide', show ? '0' : '1');
+    };
     MockingFrogWrap.prototype.updateStyle = function () {
         var _this = this;
         localStorage.setItem('mocking_frog_wrap_width', this.style.width);

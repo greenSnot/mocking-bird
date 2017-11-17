@@ -6,11 +6,13 @@ const defaultStyle = {
   height: '250px',
   'min-height': '200px',
   border: '5px solid rgba(235, 235, 235, 0.54)',
+  background: 'rgba(255, 255, 255, 0.5)',
   position: 'fixed',
   'z-index': 1000,
   top: '20px',
   right: '20px',
   'transform-origin': '100% 0',
+  'box-sizing': 'border-box',
   transform: '',
 };
 
@@ -19,6 +21,7 @@ export class MockingFrogWrap {
   content: HTMLElement;
   style = defaultStyle;
   scale: number;
+  show = true;
   constructor(scale, style?) {
     this.dom = document.createElement('div');
     this.style = style ? {
@@ -42,6 +45,10 @@ export class MockingFrogWrap {
     });
     this.dom.appendChild(this.content);
     this.updateStyle();
+  }
+  setVisibility(show) {
+    this.show = show;
+    this.dom.setAttribute('hide', show ? '0' : '1');
   }
   updateStyle() {
     localStorage.setItem('mocking_frog_wrap_width', this.style.width);

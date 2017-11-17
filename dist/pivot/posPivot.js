@@ -33,7 +33,17 @@ var PosPivot = /** @class */ (function (_super) {
         var lastTop;
         var lastRight;
         var downX, downY, isMoving;
+        var lastMouseDownTime = 0;
+        var onDoubleClick = function () {
+            lastMouseDownTime = 0;
+            _this.wrap.setVisibility(!_this.wrap.show);
+        };
         function onMouseDown(event) {
+            if (Date.now() - lastMouseDownTime < 300) {
+                onDoubleClick();
+            }
+            lastMouseDownTime = Date.now();
+            event.preventDefault();
             event.stopPropagation();
             lastTop = parseFloat(this.wrap.style.top);
             lastRight = parseFloat(this.wrap.style.right);
@@ -44,6 +54,7 @@ var PosPivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
+            event.preventDefault();
             event.stopPropagation();
             if (!isMoving) {
                 return;
@@ -55,6 +66,7 @@ var PosPivot = /** @class */ (function (_super) {
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
+            event.preventDefault();
             event.stopPropagation();
             isMoving = false;
         }

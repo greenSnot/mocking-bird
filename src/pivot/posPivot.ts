@@ -18,7 +18,17 @@ export class PosPivot extends Pivot {
     let lastTop;
     let lastRight;
     let downX, downY, isMoving;
+    let lastMouseDownTime = 0;
+    const onDoubleClick = () => {
+      lastMouseDownTime = 0;
+      this.wrap.setVisibility(!this.wrap.show);
+    }
     function onMouseDown(event) {
+      if (Date.now() - lastMouseDownTime < 300) {
+        onDoubleClick();
+      }
+      lastMouseDownTime = Date.now();
+      event.preventDefault();
       event.stopPropagation();
       lastTop = parseFloat(this.wrap.style.top);
       lastRight = parseFloat(this.wrap.style.right);
@@ -29,6 +39,7 @@ export class PosPivot extends Pivot {
       isMoving = true;
     }
     function onMouseMove(event) {
+      event.preventDefault();
       event.stopPropagation();
       if (!isMoving) {
         return;
@@ -40,6 +51,7 @@ export class PosPivot extends Pivot {
       this.wrap.updateStyle();
     }
     function onMouseUp(event) {
+      event.preventDefault();
       event.stopPropagation();
       isMoving = false;
     }
