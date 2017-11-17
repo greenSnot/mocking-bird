@@ -30,7 +30,7 @@ function doToStr(json) {
 exports.doToStr = doToStr;
 function toStr(json) {
     functionId = 0;
-    doToStr(json);
+    return doToStr(json);
 }
 exports.toStr = toStr;
 function initFunctionMap(json) {
