@@ -23,7 +23,8 @@ var ShapePivot = /** @class */ (function (_super) {
     __extends(ShapePivot, _super);
     function ShapePivot(wrap) {
         var _this = _super.call(this, wrap) || this;
-        _this.style = __assign({}, _1.pivotBaseStyle, { left: '0', bottom: '0', background: '#CDDC39', transform: 'translateX(-50%) translateY(50%)' });
+        _this.style = __assign({}, _1.pivotBaseStyle, { left: '0', bottom: '0', background: '#bbb', transform: 'translateX(-50%) translateY(50%)' });
+        _this.dom.className = 'mocking-frog-shape-pivot';
         _this.updateStyle();
         _this.initEvents();
         return _this;
@@ -35,7 +36,6 @@ var ShapePivot = /** @class */ (function (_super) {
         var downX, downY, isMoving;
         function onMouseDown(event) {
             event.preventDefault();
-            event.stopPropagation();
             lastW = parseFloat(this.wrap.style.width);
             lastH = parseFloat(this.wrap.style.height);
             var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -46,7 +46,6 @@ var ShapePivot = /** @class */ (function (_super) {
         }
         function onMouseMove(event) {
             event.preventDefault();
-            event.stopPropagation();
             if (!isMoving) {
                 return;
             }
@@ -58,7 +57,6 @@ var ShapePivot = /** @class */ (function (_super) {
         }
         function onMouseUp(event) {
             event.preventDefault();
-            event.stopPropagation();
             isMoving = false;
         }
         this.dom.addEventListener('mousedown', function (e) { return onMouseDown.bind(_this)(e); });

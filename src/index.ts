@@ -13,7 +13,7 @@ import {
   initFunctionMap
 } from './util';
 
-function renderItem(state, key, parent, root) {
+function renderItem(state, key, parent, root, depth = 1) {
   const dom = document.createElement('div');
   const content = document.createElement('div');
   const contentStyle = {
@@ -26,7 +26,7 @@ function renderItem(state, key, parent, root) {
     display: '-webkit-box',
     'margin-bottom': '5px',
     padding: '5px 10px 5px 10px',
-    background: 'rgba(255, 193, 7, 0.7)',
+    background: depth % 2 ? 'rgba(80, 80, 80, 1)' : 'rgba(50, 50, 50, 1)',
     color: '#fff',
   });
   applyStyle(content, contentStyle);
@@ -103,7 +103,7 @@ function renderItem(state, key, parent, root) {
       wrap.content.style.display = state.active ? 'block' : 'none';
       Object.keys(state.value).sort((a, b) => state.value[a].order > state.value[b].order ? 1 : -1).forEach(k => {
         const item = state.value[k];
-        wrap.content.appendChild(renderItem(item, k, state.value, root));
+        wrap.content.appendChild(renderItem(item, k, state.value, root, depth + 1));
       });
       btn.addEventListener('click', () => {
         state.active = wrap.content.style.display === 'none';
@@ -132,8 +132,11 @@ function renderItem(state, key, parent, root) {
       return select;
     },
     btn: () => {
-      const i = document.createElement('button');
-      i.innerText = 'btn';
+      const i = document.createElement('div');
+      applyStyle(i, {
+        width: '100%',
+        height: '40px',
+      });
       i.addEventListener('click', state.value);
       return i;
     },
@@ -266,6 +269,12 @@ export class MockingFrog {
         width: 0!important;
         height: 0!important;
       }
+      .mocking-frog[hide="1"] .mocking-frog-panel {
+        visibility: hidden;
+      }
+      .mocking-frog[hide="1"] .mocking-frog-shape-pivot {
+        visibility: hidden;
+      }
       .mocking-frog input {
         background: transparent;
         border: 0;
@@ -315,7 +324,7 @@ export class MockingFrog {
         max-width: 80px;
         position: relative;
         bottom: 11px;
-        background-color: #ff9632;
+        background-color: #bbb;
         cursor: -webkit-grab;
       }
       
@@ -383,8 +392,9 @@ export class MockingFrog {
   }
   initPanel() {
     this.panel = document.createElement('div');
+    this.panel.className = 'mocking-frog-panel';
     applyStyle(this.panel, {
-      background: '#ff9800',
+      background: 'rgba(0, 0, 0, 0.9)',
       height: '50px',
       'margin-top': '5px',
       display: '-webkit-box',

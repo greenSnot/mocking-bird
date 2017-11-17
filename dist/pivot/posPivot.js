@@ -23,7 +23,7 @@ var PosPivot = /** @class */ (function (_super) {
     __extends(PosPivot, _super);
     function PosPivot(wrap) {
         var _this = _super.call(this, wrap) || this;
-        _this.style = __assign({}, _1.pivotBaseStyle, { right: '0', top: '0', background: '#03A9F4', transform: 'translateX(50%) translateY(-50%)' });
+        _this.style = __assign({}, _1.pivotBaseStyle, { right: '0', top: '0', background: '#4CAF50', transform: 'translateX(50%) translateY(-50%)' });
         _this.updateStyle();
         _this.initEvents();
         return _this;
@@ -44,7 +44,6 @@ var PosPivot = /** @class */ (function (_super) {
             }
             lastMouseDownTime = Date.now();
             event.preventDefault();
-            event.stopPropagation();
             lastTop = parseFloat(this.wrap.style.top);
             lastRight = parseFloat(this.wrap.style.right);
             var x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -55,7 +54,6 @@ var PosPivot = /** @class */ (function (_super) {
         }
         function onMouseMove(event) {
             event.preventDefault();
-            event.stopPropagation();
             if (!isMoving) {
                 return;
             }
@@ -67,7 +65,6 @@ var PosPivot = /** @class */ (function (_super) {
         }
         function onMouseUp(event) {
             event.preventDefault();
-            event.stopPropagation();
             isMoving = false;
         }
         this.dom.addEventListener('mousedown', function (e) { return onMouseDown.bind(_this)(e); });

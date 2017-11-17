@@ -6,11 +6,12 @@ export class ShapePivot extends Pivot {
     ...pivotBaseStyle,
     left: '0',
     bottom: '0',
-    background: '#CDDC39',
+    background: '#bbb',
     transform: 'translateX(-50%) translateY(50%)',
   };
   constructor(wrap) {
     super(wrap);
+    this.dom.className = 'mocking-frog-shape-pivot';
     this.updateStyle();
     this.initEvents();
   }
@@ -20,7 +21,6 @@ export class ShapePivot extends Pivot {
     let downX, downY, isMoving;
     function onMouseDown(event) {
       event.preventDefault();
-      event.stopPropagation();
       lastW = parseFloat(this.wrap.style.width);
       lastH = parseFloat(this.wrap.style.height);
       const x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -31,7 +31,6 @@ export class ShapePivot extends Pivot {
     }
     function onMouseMove(event) {
       event.preventDefault();
-      event.stopPropagation();
       if (!isMoving) {
         return;
       }
@@ -43,7 +42,6 @@ export class ShapePivot extends Pivot {
     }
     function onMouseUp(event) {
       event.preventDefault();
-      event.stopPropagation();
       isMoving = false;
     }
     this.dom.addEventListener('mousedown', (e) => onMouseDown.bind(this)(e));

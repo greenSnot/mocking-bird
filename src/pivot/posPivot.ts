@@ -6,7 +6,7 @@ export class PosPivot extends Pivot {
     ...pivotBaseStyle,
     right: '0',
     top: '0',
-    background: '#03A9F4',
+    background: '#4CAF50',
     transform: 'translateX(50%) translateY(-50%)',
   };
   constructor(wrap) {
@@ -29,7 +29,6 @@ export class PosPivot extends Pivot {
       }
       lastMouseDownTime = Date.now();
       event.preventDefault();
-      event.stopPropagation();
       lastTop = parseFloat(this.wrap.style.top);
       lastRight = parseFloat(this.wrap.style.right);
       const x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -40,7 +39,6 @@ export class PosPivot extends Pivot {
     }
     function onMouseMove(event) {
       event.preventDefault();
-      event.stopPropagation();
       if (!isMoving) {
         return;
       }
@@ -52,7 +50,6 @@ export class PosPivot extends Pivot {
     }
     function onMouseUp(event) {
       event.preventDefault();
-      event.stopPropagation();
       isMoving = false;
     }
     this.dom.addEventListener('mousedown', (e) => onMouseDown.bind(this)(e));

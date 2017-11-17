@@ -5,8 +5,8 @@ const defaultStyle = {
   'min-width': '316px',
   height: '250px',
   'min-height': '200px',
-  border: '5px solid rgba(235, 235, 235, 0.54)',
-  background: 'rgba(255, 255, 255, 0.5)',
+  padding: '5px',
+  background: '#aaa',
   position: 'fixed',
   'z-index': 1000,
   top: '20px',
@@ -19,15 +19,15 @@ const defaultStyle = {
 export class MockingFrogWrap {
   dom: HTMLElement;
   content: HTMLElement;
-  style = defaultStyle;
+  style;
   scale: number;
   show = true;
   constructor(scale, style?) {
     this.dom = document.createElement('div');
     this.style = style ? {
-      ...this.style,
+      ...defaultStyle,
       ...style,
-    } : this.style;
+    } : {...defaultStyle};
     this.scale = scale;
     this.style.transform = 'scale(' + this.scale + ')';
     this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;

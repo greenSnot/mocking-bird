@@ -14,8 +14,8 @@ var defaultStyle = {
     'min-width': '316px',
     height: '250px',
     'min-height': '200px',
-    border: '5px solid rgba(235, 235, 235, 0.54)',
-    background: 'rgba(255, 255, 255, 0.5)',
+    padding: '5px',
+    background: '#aaa',
     position: 'fixed',
     'z-index': 1000,
     top: '20px',
@@ -26,10 +26,9 @@ var defaultStyle = {
 };
 var MockingFrogWrap = /** @class */ (function () {
     function MockingFrogWrap(scale, style) {
-        this.style = defaultStyle;
         this.show = true;
         this.dom = document.createElement('div');
-        this.style = style ? __assign({}, this.style, style) : this.style;
+        this.style = style ? __assign({}, defaultStyle, style) : __assign({}, defaultStyle);
         this.scale = scale;
         this.style.transform = 'scale(' + this.scale + ')';
         this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
