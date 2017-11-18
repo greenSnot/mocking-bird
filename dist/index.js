@@ -19,7 +19,7 @@ function renderItem(state, key, parent, root, depth) {
         display: '-webkit-box',
         'margin-bottom': '5px',
         padding: '5px 10px 5px 10px',
-        background: depth % 2 ? 'rgba(80, 80, 80, 1)' : 'rgba(50, 50, 50, 1)',
+        background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(50, 50, 50, 0.5)',
         color: '#fff',
     });
     util_1.applyStyle(content, contentStyle);
@@ -85,12 +85,17 @@ function renderItem(state, key, parent, root, depth) {
             util_1.applyStyle(i, {
                 display: '-webkit-box',
                 '-webkit-box-orient': 'vertical',
+                width: '100%',
                 '-webkit-box-align': 'end',
             });
             var btn = document.createElement('button');
             btn.innerText = state.active ? '-' : '+';
             i.appendChild(btn);
-            var wrap = new wrap_1.MockingFrogWrap(root.scale);
+            var wrap = new wrap_1.MockingFrogWrap(root.scale, {
+                contentStyle: {
+                    width: '100%',
+                }
+            });
             wrap.content.style.display = state.active ? 'block' : 'none';
             Object.keys(state.value).sort(function (a, b) { return state.value[a].order > state.value[b].order ? 1 : -1; }).forEach(function (k) {
                 var item = state.value[k];
@@ -224,7 +229,10 @@ var MockingFrog = /** @class */ (function () {
         this.opt = opt || {};
         util_1.initFunctionMap(defaultStateMap);
         this.scale = this.opt.scale || 1;
-        this.wrap = new wrap_1.MockingFrogWrap(this.scale, this.opt.style);
+        this.wrap = new wrap_1.MockingFrogWrap(this.scale, {
+            wrapStyle: this.opt.wrapStyle,
+            contentStyle: this.opt.contentStyle,
+        });
         this.wrap.dom.className = 'mocking-frog';
         this.shapePivot = new shapePivot_1.ShapePivot(this.wrap);
         this.posPivot = new posPivot_1.PosPivot(this.wrap);
@@ -232,7 +240,7 @@ var MockingFrog = /** @class */ (function () {
         this.wrap.dom.appendChild(this.posPivot.dom);
         var css = document.createElement('style');
         css.type = 'text/css';
-        css.appendChild(document.createTextNode("\n      .mocking-frog * {\n        font-size: " + 12 * opt.scale + "px;\n        color: #fff;\n        font-family: arial,sans-serif;\n      }\n      .mocking-frog[hide=\"1\"] {\n        border: none!important;\n        min-width: 0!important;\n        min-height: 0!important;\n        width: 0!important;\n        height: 0!important;\n      }\n      .mocking-frog[hide=\"1\"] .mocking-frog-panel {\n        visibility: hidden;\n      }\n      .mocking-frog[hide=\"1\"] .mocking-frog-shape-pivot {\n        visibility: hidden;\n      }\n      .mocking-frog input {\n        background: transparent;\n        border: 0;\n        height: 40px;\n      }\n      .mocking-frog input[type=input] {\n        width: 100%;\n        border-bottom: 1px solid #fff;\n      }\n      .mocking-frog select {\n        border: 1px solid #fff;\n        background: transparent;\n        border-radius: 0;\n        height: 35px;\n      }\n      .mocking-frog input[type=checkbox] {\n        width: 30px;\n        height: 30px;\n      }\n      \n      .mocking-frog input[type=range] {\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        position: absolute;\n        left: 50%;\n        top: 50%;\n        width: 200px;\n        transform: translate(-50%, -50%);\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-runnable-track {\n        -webkit-appearance: none;\n        background: #fff;\n        height: 2px;\n      }\n      \n      .mocking-frog input[type=range]:focus {\n        outline: none;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb {\n        -webkit-appearance: none;\n        border: 2px solid;\n        border-radius: 50%;\n        height: 25px;\n        width: 25px;\n        max-width: 80px;\n        position: relative;\n        bottom: 11px;\n        background-color: #bbb;\n        cursor: -webkit-grab;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb:active {\n        cursor: -webkit-grabbing;\n      }\n    "));
+        css.appendChild(document.createTextNode("\n      .mocking-frog * {\n        font-size: " + 12 * opt.scale + "px;\n        color: #fff;\n        font-family: arial,sans-serif;\n      }\n      .mocking-frog[hide=\"1\"] {\n        border: none!important;\n        min-width: 0!important;\n        min-height: 0!important;\n        width: 0!important;\n        height: 0!important;\n      }\n      .mocking-frog[hide=\"1\"] .mocking-frog-panel {\n        visibility: hidden;\n      }\n      .mocking-frog[hide=\"1\"] .mocking-frog-shape-pivot {\n        visibility: hidden;\n      }\n      .mocking-frog input {\n        background: transparent;\n        border: 0;\n        height: 40px;\n      }\n      .mocking-frog input[type=input] {\n        width: 100%;\n        display: block;\n        border-bottom: 1px solid #fff;\n      }\n      .mocking-frog select {\n        border: 1px solid #fff;\n        background: transparent;\n        border-radius: 0;\n        height: 35px;\n      }\n      .mocking-frog input[type=checkbox] {\n        width: 30px;\n        height: 30px;\n      }\n      \n      .mocking-frog input[type=range] {\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        position: absolute;\n        left: 50%;\n        top: 50%;\n        width: 200px;\n        transform: translate(-50%, -50%);\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-runnable-track {\n        -webkit-appearance: none;\n        background: #fff;\n        height: 2px;\n      }\n      \n      .mocking-frog input[type=range]:focus {\n        outline: none;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb {\n        -webkit-appearance: none;\n        border: 2px solid;\n        border-radius: 50%;\n        height: 25px;\n        width: 25px;\n        max-width: 80px;\n        position: relative;\n        bottom: 11px;\n        background-color: #bbb;\n        cursor: -webkit-grab;\n      }\n      \n      .mocking-frog input[type=range]::-webkit-slider-thumb:active {\n        cursor: -webkit-grabbing;\n      }\n    "));
         document.getElementsByTagName("head")[0].appendChild(css);
         document.body.appendChild(this.wrap.dom);
         try {
@@ -303,7 +311,7 @@ var MockingFrog = /** @class */ (function () {
         this.panel = document.createElement('div');
         this.panel.className = 'mocking-frog-panel';
         util_1.applyStyle(this.panel, {
-            background: 'rgba(0, 0, 0, 0.9)',
+            background: 'rgba(0, 0, 0, 0.5)',
             height: '50px',
             'margin-top': '5px',
             display: '-webkit-box',

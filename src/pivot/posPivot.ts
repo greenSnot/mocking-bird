@@ -6,7 +6,7 @@ export class PosPivot extends Pivot {
     ...pivotBaseStyle,
     right: '0',
     top: '0',
-    background: '#4CAF50',
+    background: '#009688',
     transform: 'translateX(50%) translateY(-50%)',
   };
   constructor(wrap) {

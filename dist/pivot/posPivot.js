@@ -23,7 +23,7 @@ var PosPivot = /** @class */ (function (_super) {
     __extends(PosPivot, _super);
     function PosPivot(wrap) {
         var _this = _super.call(this, wrap) || this;
-        _this.style = __assign({}, _1.pivotBaseStyle, { right: '0', top: '0', background: '#4CAF50', transform: 'translateX(50%) translateY(-50%)' });
+        _this.style = __assign({}, _1.pivotBaseStyle, { right: '0', top: '0', background: '#009688', transform: 'translateX(50%) translateY(-50%)' });
         _this.updateStyle();
         _this.initEvents();
         return _this;

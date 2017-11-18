@@ -26,7 +26,7 @@ function renderItem(state, key, parent, root: MockingFrog, depth = 1) {
     display: '-webkit-box',
     'margin-bottom': '5px',
     padding: '5px 10px 5px 10px',
-    background: depth % 2 ? 'rgba(80, 80, 80, 1)' : 'rgba(50, 50, 50, 1)',
+    background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(50, 50, 50, 0.5)',
     color: '#fff',
   });
   applyStyle(content, contentStyle);
@@ -94,12 +94,17 @@ function renderItem(state, key, parent, root: MockingFrog, depth = 1) {
       applyStyle(i, {
         display: '-webkit-box',
         '-webkit-box-orient': 'vertical',
+        width: '100%',
         '-webkit-box-align': 'end',
       });
       const btn = document.createElement('button');
       btn.innerText = state.active ? '-' : '+';
       i.appendChild(btn);
-      const wrap = new MockingFrogWrap(root.scale);
+      const wrap = new MockingFrogWrap(root.scale, {
+        contentStyle: {
+          width: '100%',
+        }
+      });
       wrap.content.style.display = state.active ? 'block' : 'none';
       Object.keys(state.value).sort((a, b) => state.value[a].order > state.value[b].order ? 1 : -1).forEach(k => {
         const item = state.value[k];
@@ -245,13 +250,17 @@ export class MockingFrog {
 
   constructor(defaultStateMap: {[key: string]: MockingFrogState}, curState: string, opt?: {
     scale?: number,
-    style?: any,
+    wrapStyle?: any,
+    contentStyle?: any,
     onChange?: Function,
   }) {
     this.opt = opt || {};
     initFunctionMap(defaultStateMap);
     this.scale = this.opt.scale || 1;
-    this.wrap = new MockingFrogWrap(this.scale, this.opt.style);
+    this.wrap = new MockingFrogWrap(this.scale, {
+      wrapStyle: this.opt.wrapStyle,
+      contentStyle: this.opt.contentStyle,
+    });
     this.wrap.dom.className = 'mocking-frog';
     this.shapePivot = new ShapePivot(this.wrap);
     this.posPivot = new PosPivot(this.wrap);
@@ -285,6 +294,7 @@ export class MockingFrog {
       }
       .mocking-frog input[type=input] {
         width: 100%;
+        display: block;
         border-bottom: 1px solid #fff;
       }
       .mocking-frog select {
@@ -401,7 +411,7 @@ export class MockingFrog {
     this.panel = document.createElement('div');
     this.panel.className = 'mocking-frog-panel';
     applyStyle(this.panel, {
-      background: 'rgba(0, 0, 0, 0.9)',
+      background: 'rgba(0, 0, 0, 0.5)',
       height: '50px',
       'margin-top': '5px',
       display: '-webkit-box',

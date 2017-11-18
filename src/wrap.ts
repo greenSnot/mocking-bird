@@ -6,7 +6,7 @@ const defaultStyle = {
   height: '250px',
   'min-height': '200px',
   padding: '5px',
-  background: '#aaa',
+  background: 'rgba(170, 170, 170, 0.5)',
   position: 'fixed',
   'z-index': 1000,
   top: '20px',
@@ -14,6 +14,8 @@ const defaultStyle = {
   'transform-origin': '100% 0',
   'box-sizing': 'border-box',
   transform: '',
+  display: '-webkit-box',
+  '-webkit-box-orient': 'vertical',
 };
 
 export class MockingFrogWrap {
@@ -22,26 +24,26 @@ export class MockingFrogWrap {
   style;
   scale: number;
   show = true;
-  constructor(scale, style?) {
+  constructor(scale, styles?: {
+    wrapStyle?: any,
+    contentStyle?: any,
+  }) {
     this.dom = document.createElement('div');
-    this.style = style ? {
+    this.style = {
       ...defaultStyle,
-      ...style,
-    } : {...defaultStyle};
+      ...(styles && styles.wrapStyle ? styles.wrapStyle : {}),
+    };
     this.scale = scale;
     this.style.transform = 'scale(' + this.scale + ')';
     this.style.width = localStorage.getItem('mocking_frog_wrap_width') || this.style.width;
     this.style.height = localStorage.getItem('mocking_frog_wrap_height') || this.style.height;
     this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;
     this.style.right = localStorage.getItem('mocking_frog_wrap_right') || this.style.right;
-    applyStyle(this.dom, {
-      display: '-webkit-box',
-      '-webkit-box-orient': 'vertical',
-    });
     this.content = document.createElement('div');
     applyStyle(this.content, {
       overflow: 'scroll',
       '-webkit-box-flex': 1,
+      ...(styles && styles.contentStyle ? styles.contentStyle : {}),
     });
     this.dom.appendChild(this.content);
     this.updateStyle();
