@@ -43,6 +43,7 @@ export class MockingFrogWrap {
     applyStyle(this.content, {
       overflow: 'scroll',
       '-webkit-box-flex': 1,
+      width: '100%',
       ...(styles && styles.contentStyle ? styles.contentStyle : {}),
     });
     this.dom.appendChild(this.content);

@@ -38,7 +38,7 @@ var MockingFrogWrap = /** @class */ (function () {
         this.style.top = localStorage.getItem('mocking_frog_wrap_top') || this.style.top;
         this.style.right = localStorage.getItem('mocking_frog_wrap_right') || this.style.right;
         this.content = document.createElement('div');
-        util_1.applyStyle(this.content, __assign({ overflow: 'scroll', '-webkit-box-flex': 1 }, (styles && styles.contentStyle ? styles.contentStyle : {})));
+        util_1.applyStyle(this.content, __assign({ overflow: 'scroll', '-webkit-box-flex': 1, width: '100%' }, (styles && styles.contentStyle ? styles.contentStyle : {})));
         this.dom.appendChild(this.content);
         this.updateStyle();
     }

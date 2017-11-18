@@ -91,11 +91,7 @@ function renderItem(state, key, parent, root, depth) {
             var btn = document.createElement('button');
             btn.innerText = state.active ? '-' : '+';
             i.appendChild(btn);
-            var wrap = new wrap_1.MockingFrogWrap(root.scale, {
-                contentStyle: {
-                    width: '100%',
-                }
-            });
+            var wrap = new wrap_1.MockingFrogWrap(root.scale);
             wrap.content.style.display = state.active ? 'block' : 'none';
             Object.keys(state.value).sort(function (a, b) { return state.value[a].order > state.value[b].order ? 1 : -1; }).forEach(function (k) {
                 var item = state.value[k];
