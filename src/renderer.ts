@@ -19,7 +19,7 @@ export function renderItem(state, key, parent, root, depth = 1) {
     display: '-webkit-box',
     'margin-bottom': '5px',
     padding: '5px 10px 5px 10px',
-    background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(50, 50, 50, 0.5)',
+    background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(170, 170, 170, 0.8)',
     color: '#fff',
   });
   applyStyle(content, contentStyle);
@@ -90,7 +90,12 @@ export function renderItem(state, key, parent, root, depth = 1) {
         width: '100%',
         '-webkit-box-align': 'end',
       });
-      const btn = document.createElement('button');
+      const btn = document.createElement('div');
+      applyStyle(btn, {
+        ...root.panelBtnStyle,
+        width: '30px',
+        'margin-bottom': '5px',
+      });
       btn.innerText = state.active ? '-' : '+';
       i.appendChild(btn);
       const wrap = new MockingFrogWrap(root.scale);

@@ -63,6 +63,16 @@ const testState = {
             value: false,
             onChange: () => { console.log('#'); },
           },
+          folder: {
+            value: {
+              c: {
+                value: false,
+                onChange: () => { console.log('#'); },
+              },
+            },
+            active: false,
+            onChange: () => { },
+          },
         },
         active: false,
         onChange: () => { },

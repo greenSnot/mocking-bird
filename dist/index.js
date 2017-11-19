@@ -1,4 +1,12 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("./types");
 var wrap_1 = require("./wrap");
@@ -13,6 +21,16 @@ var MockingFrog = /** @class */ (function () {
         this.curState = 'temp';
         this.stateList = [];
         this.stateIdToStr = {};
+        this.panelBtnStyle = {
+            height: '35px',
+            display: '-webkit-box',
+            '-webkit-box-align': 'center',
+            '-webkit-box-pack': 'center',
+            margin: '0 0 0 5px',
+            cursor: 'pointer',
+            padding: '0 5px 0 5px',
+            background: 'rgb(0, 150, 136)',
+        };
         this.opt = opt || {};
         util_1.initFunctionMap(defaultStateMap);
         this.scale = this.opt.scale || 1;
@@ -51,7 +69,11 @@ var MockingFrog = /** @class */ (function () {
                 _this.stateIdToStr[i] = util_1.toStr(defaultStateMap[i]);
             });
             this.changeState(this.curState);
-            this.save();
+            this.saveStateList();
+            this.saveCurState();
+            this.stateList.forEach(function (s) {
+                localStorage.setItem(util_1.STORAGE_STATE_PREFIX + s, _this.stateIdToStr[s]);
+            });
         }
     };
     MockingFrog.prototype.initOrder = function (state) {
@@ -117,7 +139,7 @@ var MockingFrog = /** @class */ (function () {
         this.panel.appendChild(this.selectStateList);
         this.panel.appendChild(this.btnClone);
         this.panel.appendChild(this.btnDel);
-        this.panel.appendChild(this.btnRest);
+        this.panel.appendChild(this.btnReset);
     };
     MockingFrog.prototype.initStateList = function () {
         this.selectStateList = document.createElement('select');
@@ -142,7 +164,8 @@ var MockingFrog = /** @class */ (function () {
     };
     MockingFrog.prototype.initBtnDel = function () {
         var _this = this;
-        this.btnDel = document.createElement('button');
+        this.btnDel = document.createElement('div');
+        util_1.applyStyle(this.btnDel, this.panelBtnStyle);
         this.btnDel.innerText = 'del';
         this.btnDel.addEventListener('click', function () {
             if (_this.stateList.length === 1) {
@@ -157,24 +180,25 @@ var MockingFrog = /** @class */ (function () {
     };
     MockingFrog.prototype.initBtnClone = function () {
         var _this = this;
-        this.btnClone = document.createElement('button');
+        this.btnClone = document.createElement('div');
+        util_1.applyStyle(this.btnClone, this.panelBtnStyle);
         this.btnClone.innerText = 'clone';
         this.btnClone.addEventListener('click', function () {
             var id = prompt('state id?') || 'temp';
             _this.stateList.push(id);
             _this.curState = id;
-            _this.stateIdToStr[id] = util_1.toStr(_this.state);
             _this.save();
             _this.updateStateList();
         });
     };
     MockingFrog.prototype.initBtnReset = function () {
-        this.btnRest = document.createElement('button');
-        this.btnRest.addEventListener('click', function () {
+        this.btnReset = document.createElement('div');
+        util_1.applyStyle(this.btnReset, __assign({}, this.panelBtnStyle, { margin: '0 5px 0 5px' }));
+        this.btnReset.addEventListener('click', function () {
             localStorage.clear();
             location.reload();
         });
-        this.btnRest.innerText = 'reset';
+        this.btnReset.innerText = 'reset';
     };
     MockingFrog.prototype.save = function () {
         this.saveStateList();

@@ -1,4 +1,12 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("./types");
 var wrap_1 = require("./wrap");
@@ -17,7 +25,7 @@ function renderItem(state, key, parent, root, depth) {
         display: '-webkit-box',
         'margin-bottom': '5px',
         padding: '5px 10px 5px 10px',
-        background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(50, 50, 50, 0.5)',
+        background: depth % 2 ? 'rgba(80, 80, 80, 0.8)' : 'rgba(170, 170, 170, 0.8)',
         color: '#fff',
     });
     util_1.applyStyle(content, contentStyle);
@@ -86,7 +94,8 @@ function renderItem(state, key, parent, root, depth) {
                 width: '100%',
                 '-webkit-box-align': 'end',
             });
-            var btn = document.createElement('button');
+            var btn = document.createElement('div');
+            util_1.applyStyle(btn, __assign({}, root.panelBtnStyle, { width: '30px', 'margin-bottom': '5px' }));
             btn.innerText = state.active ? '-' : '+';
             i.appendChild(btn);
             var wrap = new wrap_1.MockingFrogWrap(root.scale);

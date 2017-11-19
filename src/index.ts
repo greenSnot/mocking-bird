@@ -27,7 +27,17 @@ export class MockingFrog {
   selectStateList;
   btnClone;
   btnDel;
-  btnRest;
+  btnReset;
+  panelBtnStyle = {
+    height: '35px',
+    display: '-webkit-box',
+    '-webkit-box-align': 'center',
+    '-webkit-box-pack': 'center',
+    margin: '0 0 0 5px',
+    cursor: 'pointer',
+    padding: '0 5px 0 5px',
+    background: 'rgb(0, 150, 136)',
+  }
   
   scale: number;
 
@@ -77,7 +87,11 @@ export class MockingFrog {
         this.stateIdToStr[i] = toStr(defaultStateMap[i]);
       });
       this.changeState(this.curState);
-      this.save();
+      this.saveStateList();
+      this.saveCurState();
+      this.stateList.forEach(s => {
+        localStorage.setItem(STORAGE_STATE_PREFIX + s, this.stateIdToStr[s]);
+      });
     }
   }
   initOrder(state: MockingFrogState) {
@@ -140,7 +154,7 @@ export class MockingFrog {
     this.panel.appendChild(this.selectStateList);
     this.panel.appendChild(this.btnClone);
     this.panel.appendChild(this.btnDel);
-    this.panel.appendChild(this.btnRest);
+    this.panel.appendChild(this.btnReset);
   }
   initStateList() {
     this.selectStateList = document.createElement('select');
@@ -163,7 +177,8 @@ export class MockingFrog {
     this.selectStateList.value = this.curState;
   }
   initBtnDel() {
-    this.btnDel = document.createElement('button');
+    this.btnDel = document.createElement('div');
+    applyStyle(this.btnDel, this.panelBtnStyle);
     this.btnDel.innerText = 'del';
     this.btnDel.addEventListener('click', () => {
       if (this.stateList.length === 1) {
@@ -177,24 +192,28 @@ export class MockingFrog {
     });
   }
   initBtnClone() {
-    this.btnClone = document.createElement('button');
+    this.btnClone = document.createElement('div');
+    applyStyle(this.btnClone, this.panelBtnStyle);
     this.btnClone.innerText = 'clone';
     this.btnClone.addEventListener('click', () => {
       const id = prompt('state id?') || 'temp';
       this.stateList.push(id);
       this.curState = id;
-      this.stateIdToStr[id] = toStr(this.state);
       this.save();
       this.updateStateList();
     });
   }
   initBtnReset() {
-    this.btnRest = document.createElement('button');
-    this.btnRest.addEventListener('click', () => {
+    this.btnReset = document.createElement('div');
+    applyStyle(this.btnReset, {
+      ...this.panelBtnStyle,
+      margin: '0 5px 0 5px',
+    });
+    this.btnReset.addEventListener('click', () => {
       localStorage.clear();
       location.reload();
     });
-    this.btnRest.innerText = 'reset';
+    this.btnReset.innerText = 'reset';
   }
   save() {
     this.saveStateList();
