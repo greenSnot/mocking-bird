@@ -13,7 +13,13 @@ const STATE_MAP = {
         max: 10,
         step: 0.1,
       },
-      onChange: () => {}, // optional
+      onChange: (state) => { // optional
+        console.log(state.value);
+        console.log(state.id); // 'num1'
+      },
+      // ext info(optional)
+      id: 'num1',
+      desc: 'fooooo',
     },
 
     // dropdown
@@ -66,7 +72,7 @@ const OPTIONS = {
   },
   contentStyle: {}, // optional
   stateDropdownOnChange: () => {}, // optional
-  onChange: () => { // optional
+  onChange: (state) => { // optional
     console.log('global onChange');
     frog.save();
   },
