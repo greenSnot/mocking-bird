@@ -136,31 +136,31 @@ var MockingFrog = /** @class */ (function () {
         this.initBtnDel();
         this.initBtnReset();
         this.initStateList();
-        this.panel.appendChild(this.selectStateList);
+        this.panel.appendChild(this.selectStateDropdown);
         this.panel.appendChild(this.btnClone);
         this.panel.appendChild(this.btnDel);
         this.panel.appendChild(this.btnReset);
     };
     MockingFrog.prototype.initStateList = function () {
-        this.selectStateList = document.createElement('select');
+        this.selectStateDropdown = document.createElement('select');
         var self = this;
-        this.selectStateList.addEventListener('change', function () {
+        this.selectStateDropdown.addEventListener('change', function () {
             self.changeState(this.value);
             self.saveCurState();
-            self.opt.stateListOnChange && self.opt.stateListOnChange(this.value);
+            self.opt.stateDropdownOnChange && self.opt.stateDropdownOnChange(this.value);
         });
         this.updateStateList();
     };
     MockingFrog.prototype.updateStateList = function () {
         var _this = this;
-        this.selectStateList.innerHTML = '';
+        this.selectStateDropdown.innerHTML = '';
         this.stateList.forEach(function (s) {
             var option = document.createElement('option');
             option.value = s;
             option.innerText = s;
-            _this.selectStateList.appendChild(option);
+            _this.selectStateDropdown.appendChild(option);
         });
-        this.selectStateList.value = this.curState;
+        this.selectStateDropdown.value = this.curState;
     };
     MockingFrog.prototype.initBtnDel = function () {
         var _this = this;

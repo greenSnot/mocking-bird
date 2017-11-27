@@ -24,7 +24,7 @@ export class MockingFrog {
   panel;
   stateList: string[] = [];
   stateIdToStr = {};
-  selectStateList;
+  selectStateDropdown;
   btnClone;
   btnDel;
   btnReset;
@@ -48,7 +48,7 @@ export class MockingFrog {
     wrapStyle?: any,
     contentStyle?: any,
     onChange?: Function,
-    stateListOnChange?: Function,
+    stateDropdownOnChange?: Function,
   }) {
     this.opt = opt || {};
     initFunctionMap(defaultStateMap);
@@ -151,30 +151,30 @@ export class MockingFrog {
     this.initBtnDel();
     this.initBtnReset();
     this.initStateList();
-    this.panel.appendChild(this.selectStateList);
+    this.panel.appendChild(this.selectStateDropdown);
     this.panel.appendChild(this.btnClone);
     this.panel.appendChild(this.btnDel);
     this.panel.appendChild(this.btnReset);
   }
   initStateList() {
-    this.selectStateList = document.createElement('select');
+    this.selectStateDropdown = document.createElement('select');
     const self = this;
-    this.selectStateList.addEventListener('change', function() {
+    this.selectStateDropdown.addEventListener('change', function() {
       self.changeState(this.value);
       self.saveCurState();
-      self.opt.stateListOnChange && self.opt.stateListOnChange(this.value);
+      self.opt.stateDropdownOnChange && self.opt.stateDropdownOnChange(this.value);
     });
     this.updateStateList();
   }
   updateStateList() {
-    this.selectStateList.innerHTML = '';
+    this.selectStateDropdown.innerHTML = '';
     this.stateList.forEach(s => {
       const option = document.createElement('option');
       option.value = s;
       option.innerText = s;
-      this.selectStateList.appendChild(option);
+      this.selectStateDropdown.appendChild(option);
     });
-    this.selectStateList.value = this.curState;
+    this.selectStateDropdown.value = this.curState;
   }
   initBtnDel() {
     this.btnDel = document.createElement('div');

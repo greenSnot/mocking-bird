@@ -26,7 +26,7 @@ const testState = {
     onChange: () => {},
   },
   input1: {
-    value: 'noImmediatelyChange',
+    value: 'notImmediatelyChange',
     onChange: () => console.log('!'),
   },
   input2: {
