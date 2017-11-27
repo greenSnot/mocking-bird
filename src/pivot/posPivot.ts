@@ -28,7 +28,6 @@ export class PosPivot extends Pivot {
         onDoubleClick();
       }
       lastMouseDownTime = Date.now();
-      event.preventDefault();
       lastTop = parseFloat(this.wrap.style.top);
       lastRight = parseFloat(this.wrap.style.right);
       const x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -38,7 +37,6 @@ export class PosPivot extends Pivot {
       isMoving = true;
     }
     function onMouseMove(event) {
-      event.preventDefault();
       if (!isMoving) {
         return;
       }
@@ -49,7 +47,6 @@ export class PosPivot extends Pivot {
       this.wrap.updateStyle();
     }
     function onMouseUp(event) {
-      event.preventDefault();
       isMoving = false;
     }
     this.dom.addEventListener('mousedown', (e) => onMouseDown.bind(this)(e));

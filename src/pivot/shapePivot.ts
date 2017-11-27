@@ -20,7 +20,6 @@ export class ShapePivot extends Pivot {
     let lastH;
     let downX, downY, isMoving;
     function onMouseDown(event) {
-      event.preventDefault();
       lastW = parseFloat(this.wrap.style.width);
       lastH = parseFloat(this.wrap.style.height);
       const x = Math.floor(event.clientX >= 0 ? event.clientX : event.touches[event.touches.length - 1].clientX);
@@ -30,7 +29,6 @@ export class ShapePivot extends Pivot {
       isMoving = true;
     }
     function onMouseMove(event) {
-      event.preventDefault();
       if (!isMoving) {
         return;
       }
@@ -41,13 +39,12 @@ export class ShapePivot extends Pivot {
       this.wrap.updateStyle();
     }
     function onMouseUp(event) {
-      event.preventDefault();
       isMoving = false;
     }
     this.dom.addEventListener('mousedown', (e) => onMouseDown.bind(this)(e));
     this.dom.addEventListener('touchstart', (e) => onMouseDown.bind(this)(e));
-    document.body.addEventListener('mousemove', (e) => onMouseMove.bind(this)(e));
-    document.body.addEventListener('touchmove', (e) => onMouseMove.bind(this)(e));
+    this.dom.addEventListener('mousemove', (e) => onMouseMove.bind(this)(e));
+    this.dom.addEventListener('touchmove', (e) => onMouseMove.bind(this)(e));
     this.dom.addEventListener('mouseup', (e) => onMouseUp.bind(this)(e));
     this.dom.addEventListener('touchend', (e) => onMouseUp.bind(this)(e));
   }
