@@ -39,6 +39,7 @@ var PosPivot = /** @class */ (function (_super) {
             _this.wrap.setVisibility(!_this.wrap.show);
         };
         function onMouseDown(event) {
+            event.preventDefault();
             if (Date.now() - lastMouseDownTime < 300) {
                 onDoubleClick();
             }
@@ -52,6 +53,7 @@ var PosPivot = /** @class */ (function (_super) {
             isMoving = true;
         }
         function onMouseMove(event) {
+            event.preventDefault();
             if (!isMoving) {
                 return;
             }
@@ -62,6 +64,7 @@ var PosPivot = /** @class */ (function (_super) {
             this.wrap.updateStyle();
         }
         function onMouseUp(event) {
+            event.preventDefault();
             isMoving = false;
         }
         this.dom.addEventListener('mousedown', function (e) { return onMouseDown.bind(_this)(e); });
